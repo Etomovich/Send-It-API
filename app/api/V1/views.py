@@ -105,3 +105,8 @@ class CompletedOrders(Resource):
 
     def get(self):
         return {"completed orders": [order.serialize() for order in orders if order.status == "completed"]}, 200
+
+
+class InTransitOrders(Resource):
+    def get(self):
+        return {"In Transitorder": [order.serialize() for order in orders if order.status == "In Transit"]}
