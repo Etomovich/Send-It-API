@@ -72,3 +72,14 @@ class SpecificOrder(Resource):
             order.status = "approved"
             return {"message": "your parcel order has been approved"}, 200
         return {"message": "order not found"}, 404
+
+class DeclinedOrders(Resource):
+    def get(self):
+        '''return all orders'''
+
+        return {
+            "declined orders": [
+                order.serialize() for order in orders
+                if order.status == "declined"
+            ]
+        }
