@@ -99,3 +99,9 @@ class DeclineOrder(Resource):
             return {"message": "Order declined"}
 
         return {"message": "Order not found"}, 404
+
+class CompletedOrders(Resource):
+    '''return a list of parcel orders completed by admin'''
+
+    def get(self):
+        return {"completed orders": [order.serialize() for order in orders if order.status == "completed"]}, 200
