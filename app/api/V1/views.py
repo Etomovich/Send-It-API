@@ -33,3 +33,8 @@ class CreateParcel(Resource):
             orders.append(order)
             return {"message": "Order placed waiting for approval!"}, 201
         return {"message": "sorry we do not deliver to {}".format(order.destination)}
+
+
+class GetOrders(Resource):
+    def get(self):
+        return {"orders": [order.serialize() for order in orders]
