@@ -10,18 +10,18 @@ version_1 = Blueprint('v1',__name__)
     
 api = Api(version_1,prefix = "/api/v1")
 
-api.add_resource(SpecificOrder, '/orders/<int:id>')
+api.add_resource(SpecificParcel, '/parcels/<int:id>')
 api.add_resource(CreateParcel, '/parcels')
-api.add_resource(GetOrders, '/orders')
-api.add_resource(GetAcceptedOrders, '/acceptedorders')
-api.add_resource(CompleteOrder, '/orders/<int:id>/completed')
-api.add_resource(DeliveredOrders, '/orders/completedorders')
+api.add_resource(GetParcels, '/parcels')
+api.add_resource(GetAcceptedParcels, '/acceptedparcels')
+api.add_resource(DeliverParcel, '/parcels/<int:id>/Delivered')
+api.add_resource(DeliveredOrders, '/parcels/delivered')
     
-api.add_resource(DeclinedOrders, '/orders/declined')
-api.add_resource(AcceptStatus, '/orders/<int:id>/approved')
-api.add_resource(MarkOrderInTransit, '/orders/<int:id>/intransit')
-api.add_resource(InTransitOrders, '/orders/intransit')
-api.add_resource(DeclineOrder, '/orders/<int:id>/declined')
+api.add_resource(DeclinedOrders, '/parcels/declined')
+api.add_resource(AcceptStatus, '/parcels/<int:id>/approved')
+api.add_resource(MarkOrderInTransit, '/parcels/<int:id>/moving')
+api.add_resource(InTransitOrders, '/parcels/moving')
+api.add_resource(DeclineParcel, '/parcel/<int:id>/declined')
 
 
 
