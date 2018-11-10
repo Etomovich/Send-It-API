@@ -100,13 +100,87 @@ class DeclineOrder(Resource):
 
         return {"message": "Order not found"}, 404
 
-class CompletedOrders(Resource):
+class DeliveredOrders(Resource):
     '''return a list of parcel orders completed by admin'''
 
     def get(self):
         return {"completed orders": [order.serialize() for order in orders if order.status == "completed"]}, 200
 
 
+class MovingOrders(Resource):
+    def get(self):
+        return {"In Transitorder": [order.serialize() for order in orders if order.status == "In Transit"]}
+
+class MarkOrderInTransit(Resource):
+    def put(self, id):
+        '''mark order has started being transported'''
+        order = Order().get_by_id(id)
+
+        if order:
+            if order.status == "completed" or order.status == "declined":
+                return {"You already marked the order as {}".format(order.status)}, 200
+
+            if order.status == "Pending":
+                return {"message": "please approve the order first"}, 200
+
+            if order.status == "approved":
+                order.status = "In Transit"
+                return {"message": "The order is now on the road!Rember to keep track of the order"}, 200
+
+        return {"message": "The order could not be found!,check on the id please"}, 404
+
+
 class InTransitOrders(Resource):
     def get(self):
         return {"In Transitorder": [order.serialize() for order in orders if order.status == "In Transit"]}
+
+
+class AcceptStatus(Resource):
+    def put(self, id):
+        '''mark an order as approved'''
+
+        order = Order().get_by_id(id)
+
+        if order:
+            if order.status != "Pending":
+                return {"message": "order already {}".format(order.status)}, 200
+            order.status = "approved"
+            return {"message": "your order has been approved"}, 200
+
+        return {"message": "order not found"}, 404
+
+class CompleteOrder(Resource):
+    def put(self, id):
+        '''mark an order as completed by admin'''
+        order = Order().get_by_id(id)
+
+        if order:
+            if order.status == "completed" or order.status == "declined":
+                return {"message": "order already {}".format(order.status)}
+
+            if order.status == "Pending":
+                return {"message": "please approve the order first "}
+
+            if order.status == "In Transit":
+                order.status = "completed"
+                return {
+                    "message":
+                    "Your has been order completed awaiting delivery"
+                }
+
+        return {"message": "Order not found"}, 404
+
+
+class GetAcceptedOrders(Resource):
+    '''Get the Orders accepted by admin'''
+
+    def get(self):
+        '''return list of approved orders'''
+
+        return {
+            "approved_orders": [
+                order.serialize() for order in orders
+                if order.status == "approved"
+            ]
+        }, 200
+

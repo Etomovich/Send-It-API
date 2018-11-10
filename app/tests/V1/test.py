@@ -89,7 +89,7 @@ class TestOrders(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 200)
 
-    def post_parcel(self):
+    def test_create_parcel(self):
         '''method to post an order'''
         data = {
             "origin": "kiambu",
@@ -270,3 +270,6 @@ class TestOrders(unittest.TestCase):
 
         self.assertEqual(res.status_code, 400)
         self.assertEqual(json.loads(res.data)['message'], "Invalid weight")
+
+
+unittest.main()

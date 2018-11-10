@@ -1,7 +1,17 @@
 orders = []
 accepted_orders = []
-destinations = ['nairobi', 'nakuru', 'kisumu',
-                'naivasha', 'mombasa', 'kiambu']
+destinations = ['nairobi', 'nakuru', 'kisumu']
+
+class User():
+    def __init__(self,id,username,password):
+        self.id = id
+        self.username = username
+        self.password = password
+
+
+    def get_user_by_id(self ,user_id):
+        if self.id == user_id:
+            return username
 
 
 class Order:
@@ -36,3 +46,7 @@ class Order:
         for order in orders:
             if order.id == order_id:
                 return order
+
+
+
+    
