@@ -193,7 +193,7 @@ class TestAllOrders(unittest.TestCase):
     def test_decline_an_order(self):
         '''test for declining an order'''
         res = self.client.put(
-            "api/v1/parcels/1/declined",data=json.dumps(data),
+            "api/v1/parcels/1/declined",data=json.dumps(self.data),
             headers = {"content-type": "application/json"}
         )
         self.assertEqual(res.status_code,200)
