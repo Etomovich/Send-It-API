@@ -28,7 +28,7 @@ class TestAllOrders(unittest.TestCase):
         }
 
         res = self.client.post(
-            "api/v1//parcels",
+            "api/v1/parcels",
             data=json.dumps(data),
             headers={"content-type": "application/json"}
         )
@@ -41,7 +41,7 @@ class TestAllOrders(unittest.TestCase):
         '''get all placed orders'''
 
         res = self.client.get(
-            "/parcels",
+            "api/v1/parcels",
             headers={"content-type": "application/json"}
         )
         print(res.data)
@@ -51,7 +51,7 @@ class TestAllOrders(unittest.TestCase):
         """ return a list of orders in transit """
 
         res = self.client.get(
-            "/api/v1/orders/intransit",
+            "/api/v1/parcels/moving",
             headers={"content-type": "application/json"}
         )
 
@@ -61,7 +61,7 @@ class TestAllOrders(unittest.TestCase):
         '''get parcel order by id'''
 
         res = self.client.get(
-            "specificparcel/1",
+            "api/v1/parcels/1",
             headers={"content-type": "application/json"}
         )
 
@@ -72,7 +72,7 @@ class TestAllOrders(unittest.TestCase):
         '''test for parcel orders completed by admin'''
 
         res = self.client.put(
-            "/parcels/1/delivered",
+            "api/v1/parcels/1/delivered",
 
             headers={"content-type": "application/json"}
         )
@@ -85,7 +85,7 @@ class TestAllOrders(unittest.TestCase):
         '''test for returning a list of parcel orders declined by admin'''
 
         res = self.client.get(
-            "/parcels/declined",
+            "api/v1/parcels/declined",
             headers={"content-type": "application/json"}
         )
         self.assertEqual(res.status_code, 200)
@@ -108,7 +108,7 @@ class TestAllOrders(unittest.TestCase):
     def test_cancel_parcel(self):
         '''test for deleting an order'''
         res = self.client.delete(
-            "/parcels/1",
+            "api/v1/parcels/1",
             headers={"content-type": "application/json"}
 
         )
@@ -118,7 +118,7 @@ class TestAllOrders(unittest.TestCase):
         '''test for getting a list of all orders accepted by admin'''
 
         res = self.client.get(
-            "/parcels/delivered",
+            "api/v1/parcels/delivered",
             headers={"content-type": "application/json"}
         )
         self.assertEqual(res.status_code, 200)
