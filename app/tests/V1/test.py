@@ -81,7 +81,7 @@ class TestAllOrders(unittest.TestCase):
 
         
         self.assertEqual(json.loads(res.data)[
-                         'message'], "please approve the order first ")
+                         'message'], "Order not found")
 
     def test_declined_parcels_by_admin(self):
         '''test for returning a list of parcel orders declined by admin'''
