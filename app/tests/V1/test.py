@@ -13,6 +13,13 @@ class TestAllOrders(unittest.TestCase):
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
+        
+        data = {
+            "origin": "nairobi",
+            "price": 200,
+            "destination": "nakuru",
+            "weight": 20
+        }
 
     def tearDown(self):
 
@@ -20,12 +27,7 @@ class TestAllOrders(unittest.TestCase):
 
     def test_create_parcel(self):
         '''test place a parcel order'''
-        data = {
-            "origin": "nairobi",
-            "price": 200,
-            "destination": "kisii",
-            "weight": 20
-        }
+        
 
         res = self.client.post(
             "api/v1/parcels",
@@ -61,7 +63,7 @@ class TestAllOrders(unittest.TestCase):
         '''get parcel order by id'''
 
         res = self.client.get(
-            "api/v1/parcels/1",
+            "api/v1/parcels/1",data=json.dumps(data),
             headers={"content-type": "application/json"}
         )
 
@@ -72,7 +74,7 @@ class TestAllOrders(unittest.TestCase):
         '''test for parcel orders completed by admin'''
 
         res = self.client.put(
-            "api/v1/parcels/1/delivered",
+            "api/v1/parcels/1/delivered",data=json.dumps(data),
 
             headers={"content-type": "application/json"}
         )
@@ -108,7 +110,7 @@ class TestAllOrders(unittest.TestCase):
     def test_cancel_parcel(self):
         '''test for deleting an order'''
         res = self.client.delete(
-            "api/v1/parcels/1",
+            "api/v1/parcels/1",data=json.dumps(data),
             headers={"content-type": "application/json"}
 
         )
@@ -127,7 +129,7 @@ class TestAllOrders(unittest.TestCase):
         '''test for a parcel order whose status has been approved'''
 
         res = self.client.put(
-            "api/v1/parcels/1/approved",
+            "api/v1/parcels/1/approved",data=json.dumps(data),
             headers={"content-type": "application/json"}
         )
 
@@ -191,7 +193,7 @@ class TestAllOrders(unittest.TestCase):
     def test_decline_an_order(self):
         '''test for declining an order'''
         res = self.client.put(
-            "api/v1/parcels/1/declined",
+            "api/v1/parcels/1/declined",data=json.dumps(data),
             headers = {"content-type": "application/json"}
         )
         self.assertEqual(res.status_code,200)
@@ -232,7 +234,7 @@ class TestAllOrders(unittest.TestCase):
 
         self.assertEqual(res.status_code, 400)
         self.assertEqual(json.loads(res.data)[
-                         'message'], "destination is invalid")
+                         'message'], "destination not valid")
 
     def test_invalid_price(self):
         '''test for invalid  price'''
