@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource
-from .models import Order,orders, accepted_orders, destinations
-from utils import valid_destination_name, valid_origin_name
+from ..models.models import Order,orders, accepted_orders, destinations
+from ..utils import valid_destination_name, valid_origin_name
 
 class CreateParcel(Resource):
     '''place parcel order.'''
@@ -109,7 +109,7 @@ class DeliveredParcels(Resource):
 
 class MovingParcels(Resource):
     def get(self):
-        return {"In Transitorder": [order.serialize() for order in orders if order.status == "In Transit"]}
+        return {"moving parcels": [order.serialize() for order in orders if order.status == "In Transit"]}
 
 class MarkParcelInTransit(Resource):
     def put(self, id):
@@ -132,7 +132,7 @@ class MarkParcelInTransit(Resource):
 
 
 
-class AcceptStatus(Resource):
+class ApproveParcel(Resource):
     def put(self, id):
         '''mark an order as approved'''
 
@@ -146,7 +146,7 @@ class AcceptStatus(Resource):
 
         return {"message": "order not found"}, 404
 
-class CompleteOrder(Resource):
+class DeliverParcel(Resource):
     def put(self, id):
         '''mark an order as completed by admin'''
         order = Order().get_by_id(id)
@@ -168,7 +168,7 @@ class CompleteOrder(Resource):
         return {"message": "Order not found"}, 404
 
 
-class GetAcceptedOrders(Resource):
+class GetAcceptedParcels(Resource):
     '''Get the Orders accepted by admin'''
 
     def get(self):
