@@ -107,8 +107,6 @@ class TestAllOrders(unittest.TestCase):
 
     def test_cancel_parcel(self):
         '''test for deleting an order'''
-
-        self.post_parcel()
         res = self.client.delete(
             "/parcels/1",
             headers={"content-type": "application/json"}
