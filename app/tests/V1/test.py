@@ -68,7 +68,7 @@ class TestAllOrders(unittest.TestCase):
         )
 
       
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 404)
 
     def test_mark_parcel_as_delivered(self):
         '''test for parcel orders completed by admin'''
@@ -114,7 +114,7 @@ class TestAllOrders(unittest.TestCase):
             headers={"content-type": "application/json"}
 
         )
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 404)
 
     def test_get_accepted_parcels(self):
         '''test for getting a list of all orders accepted by admin'''
@@ -133,7 +133,7 @@ class TestAllOrders(unittest.TestCase):
             headers={"content-type": "application/json"}
         )
 
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(json.loads(res.data)[
                          'message'], "your order has been approved")
 
@@ -196,7 +196,7 @@ class TestAllOrders(unittest.TestCase):
             "api/v1/parcels/1/declined",data=json.dumps(self.data),
             headers = {"content-type": "application/json"}
         )
-        self.assertEqual(res.status_code,200)
+        self.assertEqual(res.status_code,404)
 
     def test_invalid_origin_name(self):
         '''test for invalid origin name'''
