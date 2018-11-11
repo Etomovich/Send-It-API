@@ -1,8 +1,7 @@
 #161834525
 from flask import Flask ,Blueprint
 from flask_restful import Api
-from instance import *
-from .views import GetOrders,  DeliveredOrders, CreateParcel, InTransitOrders, SpecificOrder, DeclinedOrders, MarkOrderInTransit, CompleteOrder, AcceptStatus, GetAcceptedOrders, DeclineOrder
+from views.views import GetOrders,  DeliveredOrders, CreateParcel, InTransitOrders, SpecificOrder, DeclinedOrders, MarkOrderInTransit, CompleteOrder, AcceptStatus, GetAcceptedOrders, DeclineOrder
 
 version_1 = Blueprint('v1',__name__) 
 
@@ -17,10 +16,10 @@ api.add_resource(GetAcceptedParcels, '/acceptedparcels')
 api.add_resource(DeliverParcel, '/parcels/<int:id>/Delivered')
 api.add_resource(DeliveredOrders, '/parcels/delivered')
     
-api.add_resource(DeclinedOrders, '/parcels/declined')
+api.add_resource(DeclinedParcels, '/parcels/declined')
 api.add_resource(AcceptStatus, '/parcels/<int:id>/approved')
 api.add_resource(MarkOrderInTransit, '/parcels/<int:id>/moving')
-api.add_resource(InTransitOrders, '/parcels/moving')
+api.add_resource(MovinParcels, '/parcels/moving')
 api.add_resource(DeclineParcel, '/parcel/<int:id>/declined')
 
 

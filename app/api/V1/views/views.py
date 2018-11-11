@@ -35,11 +35,11 @@ class CreateParcel(Resource):
         return {"message": "sorry we do not deliver to {}".format(order.destination)}
 
 
-class GetOrders(Resource):
+class GetParcels(Resource):
     def get(self):
         return {"orders": [order.serialize() for order in orders]}
 
-class SpecificOrder(Resource):
+class SpecificParcel(Resource):
     '''fetch a specific parcel order by id'''
 
     def get(self, id):
@@ -73,7 +73,7 @@ class SpecificOrder(Resource):
             return {"message": "your parcel order has been approved"}, 200
         return {"message": "order not found"}, 404
 
-class DeclinedOrders(Resource):
+class DeclinedParcels(Resource):
     def get(self):
         '''return all orders'''
 
@@ -84,7 +84,7 @@ class DeclinedOrders(Resource):
             ]
         }
 
-class DeclineOrder(Resource):
+class DeclineParcel(Resource):
     def put(self, id):
         '''decline a specific order'''
 
@@ -100,18 +100,18 @@ class DeclineOrder(Resource):
 
         return {"message": "Order not found"}, 404
 
-class DeliveredOrders(Resource):
+class DeliveredParcels(Resource):
     '''return a list of parcel orders completed by admin'''
 
     def get(self):
         return {"completed orders": [order.serialize() for order in orders if order.status == "completed"]}, 200
 
 
-class MovingOrders(Resource):
+class MovingParcels(Resource):
     def get(self):
         return {"In Transitorder": [order.serialize() for order in orders if order.status == "In Transit"]}
 
-class MarkOrderInTransit(Resource):
+class MarkParcelInTransit(Resource):
     def put(self, id):
         '''mark order has started being transported'''
         order = Order().get_by_id(id)
@@ -130,9 +130,6 @@ class MarkOrderInTransit(Resource):
         return {"message": "The order could not be found!,check on the id please"}, 404
 
 
-class InTransitOrders(Resource):
-    def get(self):
-        return {"In Transitorder": [order.serialize() for order in orders if order.status == "In Transit"]}
 
 
 class AcceptStatus(Resource):
