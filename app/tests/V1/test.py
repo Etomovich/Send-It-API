@@ -28,7 +28,7 @@ class TestAllOrders(unittest.TestCase):
         }
 
         res = self.client.post(
-            "/parcels",
+            "api/v1//parcels",
             data=json.dumps(data),
             headers={"content-type": "application/json"}
         )
