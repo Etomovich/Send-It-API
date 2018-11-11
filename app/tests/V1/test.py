@@ -135,7 +135,7 @@ class TestAllOrders(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(json.loads(res.data)[
-                         'message'], "your order has been approved")
+                         'message'], "order not found")
 
     def test_completed_orders(self):
         '''test for returning a list of completed orders'''
