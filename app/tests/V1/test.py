@@ -9,7 +9,7 @@ class TestAllOrders(unittest.TestCase):
         '''set the app for testing
         setting a test client for testing'''
 
-        self.app = create_app("testing")
+        self.app = create_app()
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
