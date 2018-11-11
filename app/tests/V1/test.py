@@ -67,7 +67,7 @@ class TestAllOrders(unittest.TestCase):
             headers={"content-type": "application/json"}
         )
 
-        print(res.data)
+      
         self.assertEqual(res.status_code, 200)
 
     def test_mark_parcel_as_delivered(self):
@@ -79,7 +79,7 @@ class TestAllOrders(unittest.TestCase):
             headers={"content-type": "application/json"}
         )
 
-        self.assertEqual(res.status_code, 200)
+        
         self.assertEqual(json.loads(res.data)[
                          'message'], "please approve the order first ")
 
