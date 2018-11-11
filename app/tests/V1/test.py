@@ -99,7 +99,7 @@ class TestAllOrders(unittest.TestCase):
             "weight": 25
         }
         res = self.client.post(
-            "/parcels",
+            "api/v1/parcels",
             data=json.dumps(data),
             headers={"content-type": "application/json"}
         )
@@ -127,7 +127,7 @@ class TestAllOrders(unittest.TestCase):
         '''test for a parcel order whose status has been approved'''
 
         res = self.client.put(
-            "/parcels/1/approved",
+            "api/v1/parcels/1/approved",
             headers={"content-type": "application/json"}
         )
 
@@ -139,7 +139,7 @@ class TestAllOrders(unittest.TestCase):
         '''test for returning a list of completed orders'''
 
         res = self.client.get(
-            "/parcels/delivered",
+            "api/v1/parcels/delivered",
             headers={"content-type": "application/json"}
         )
         self.assertEqual(res.status_code, 200)
@@ -148,7 +148,7 @@ class TestAllOrders(unittest.TestCase):
         '''testing for a an order that doesn't exist'''
 
         res = self.client.get(
-            "/parcels/345",
+            "api/v1/parcels/345",
             headers={"content-type": "application/json"}
         )
         self.assertEqual(res.status_code, 404)
@@ -159,7 +159,7 @@ class TestAllOrders(unittest.TestCase):
         '''deleting an order that doesn't exist'''
 
         res = self.client.delete(
-            "/parcels/156",
+            "api/v1/parcels/156",
             headers={"content-type": "application/json"}
         )
         self.assertEqual(res.status_code, 404)
@@ -170,7 +170,7 @@ class TestAllOrders(unittest.TestCase):
         '''testing for declined order'''
 
         res = self.client.get(
-            "/parcels/declined",
+            "api/v1/parcels/declined",
             headers={"content-type": "application/json"}
         )
         self.assertEqual(res.status_code, 200)
@@ -179,7 +179,7 @@ class TestAllOrders(unittest.TestCase):
         '''test for parcel orders marked intransit by admin'''
 
         res = self.client.put(
-            "/parcels/2/moving",
+            "api/v1/parcels/2/moving",
 
             headers={"content-type": "application/json"}
         )
@@ -191,13 +191,13 @@ class TestAllOrders(unittest.TestCase):
     def test_decline_an_order(self):
         '''test for declining an order'''
         res = self.client.put(
-            "/parcels/1/declined",
+            "api/v1/parcels/1/declined",
             headers = {"content-type": "application/json"}
         )
         self.assertEqual(res.status_code,200)
 
     def test_invalid_origin_name(self):
-        '''test for invalid food name'''
+        '''test for invalid origin name'''
         data = {
             "origin": "******",
             "price": 20,
@@ -206,7 +206,7 @@ class TestAllOrders(unittest.TestCase):
         }
 
         res = self.client.post(
-            "/parcels",
+            "api/v1/parcels",
             data=json.dumps(data),
             headers={"content-type": "application/json"}
         )
@@ -225,7 +225,7 @@ class TestAllOrders(unittest.TestCase):
         }
 
         res = self.client.post(
-            "/parcels",
+            "api/v1/parcels",
             data=json.dumps(data),
             headers={"content-type": "application/json"}
         )
@@ -244,7 +244,7 @@ class TestAllOrders(unittest.TestCase):
         }
 
         res = self.client.post(
-            "/parcels",
+            "api/v1/parcels",
             data=json.dumps(data),
             headers={"content-type": "application/json"}
         )
@@ -262,7 +262,7 @@ class TestAllOrders(unittest.TestCase):
         }
 
         res = self.client.post(
-            "/parcels",
+            "api/v1/parcels",
             data=json.dumps(data),
             headers={"content-type": "application/json"}
         )
