@@ -13,6 +13,8 @@ script:
 after_success:
   - coveralls
 
-
-cache:
-  pip
+# safelist
+branches:
+  only:
+    - develop
+    -ft-final-file-structre-161859299
