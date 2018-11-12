@@ -14,9 +14,4 @@ after_success:
   - coveralls
 
 # safelist
-branches:
-  only:
-    - develop
-    - ch-creation-of-.travis.yml-file-161821543
-    - bg-handling-gitignore-errors-161859299
-    - bg-fixing-of-import-paths-161835211
+
