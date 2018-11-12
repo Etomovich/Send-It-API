@@ -14,7 +14,3 @@ after_success:
   - coveralls
 
 # safelist
-branches:
-  only:
-    - develop
-    -ft-final-file-structre-161859299
