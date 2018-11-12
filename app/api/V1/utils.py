@@ -13,10 +13,10 @@ def valid_origin_name(origin):
     return re.match(regex, origin)
 
 
-# def valid_person_name(customer_name):
-#     '''validate person's name'''
-#     regex = "^[a-zA-Z ]{4,}$"
-#     return re.match(regex, customer_name) 
+def valid_person_name(customer_name):
+    '''validate person's name'''
+    regex = "^[a-zA-Z ]{4,}$"
+    return re.match(regex, customer_name) 
 
 
 def validate_input(input):
@@ -26,7 +26,7 @@ def validate_input(input):
 
 
     
-# def valid_destination(destination):
-#     '''validate destination name'''
-#     regex = "^[a-zA-Z 0-9]{3,}$"
-#     return re.match(regex, destination)
+def valid_destination(destination):
+    '''validate destination name'''
+    regex = "^[a-zA-Z 0-9]{3,}$"
+    return re.match(regex, destination)
