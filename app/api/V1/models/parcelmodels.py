@@ -1,6 +1,6 @@
 orders = []
 accepted_orders = []
-destinations = ['nairobi', 'nakuru', 'kisumu']
+destinations = ['Nairobi', 'Nakuru', 'Kisumu']
 
 class User():
     def __init__(self,id,username,password):
