@@ -181,12 +181,12 @@ class TestAllOrders(unittest.TestCase):
         '''test for parcel orders marked intransit by admin'''
 
         res = self.client.put(
-            "api/v1/parcels/2/moving",
+            "api/v1/parcels/1/moving",
 
             headers={"content-type": "application/json"}
         )
 
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code,404)
         self.assertEqual(json.loads(res.data)[
                          'message'], "please approve the order first")
 
