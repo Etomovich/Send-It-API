@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api
-from .views.parcelviews import GetParcels, DeliveredParcels, CreateParcel,MovingParcels,SpecificParcel, DeclinedParcels,  MarkParcelInTransit, DeliverParcel,  ApproveParcel, GetAcceptedParcels, DeclineParcel
+from .views.parcelviews import GetParcels, DeliveredParcels, CancelSpecificParcel, GetUserParcels, CreateParcel,MovingParcels,SpecificParcel, DeclinedParcels,  MarkParcelInTransit, DeliverParcel,  ApproveParcel, GetAcceptedParcels, DeclineParcel
 
 version_1 = Blueprint('v1',__name__) 
     
@@ -17,4 +17,6 @@ api.add_resource(MovingParcels, '/parcels/moving')
 api.add_resource(DeliverParcel, '/parcels/<int:id>/delivered')
 api.add_resource(ApproveParcel, '/parcels/<int:id>/approved')
 api.add_resource(MarkParcelInTransit, '/parcels/<int:id>/moving')
-api.add_resource(DeclineParcel, '/parcel/<int:id>/declined')
+api.add_resource(DeclineParcel, '/parcels/<int:id>/declined')
+api.add_resource(CancelSpecificParcel, '/parcels/<int:uyd>/cancel')
+api.add_resource(GetUserParcels, '/users/<int:user_id>/parcels')

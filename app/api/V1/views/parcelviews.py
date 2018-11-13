@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import request
 from flask_restful import Resource
 from ..models.parcelmodels import Order,orders, accepted_orders, destinations
 from ..utils import valid_destination_name, valid_origin_name
@@ -39,8 +39,46 @@ class GetParcels(Resource):
     def get(self):
         return {"orders": [order.serialize() for order in orders]}
 
+
+class GetUserParcels(Resource):
+    '''gets all parcels belonging to a specific user'''
+
+    def get(self, user_id):
+
+        order = Order().get_by_user_id(user_id)
+        if order:
+            return{"User orders for user {}" .format(user_id): order.serialize() for order in orders},200
+        return{"message": "order not found"},404
+
+
+
+class CancelSpecificParcel(Resource):
+    def put(self, id):
+        order = Order().get_by_id(id)
+
+        if order:
+            if order.status == ("Cancelled" or "Moving" or "Delivered"):
+
+                return {"message":"Cannot be cancelled, this order has already been {}".format(order.status)},200
+            order.status = "cancelled"
+            return{"Message":"parcel order cancelled succesfully"},200
+
+        return {"message":"order not found"},404
+
+
+
 class SpecificParcel(Resource):
     '''fetch a specific parcel order by id'''
+    def put(self, id):
+        '''approve an  a parcel order'''
+        order = Order().get_by_id(id)
+
+        if order:
+            if order.status != "Pending":
+                return {"message": "order already {}".format(order.status)}, 200
+            order.status = "approved"
+            return {"message": "your parcel order has been approved"}, 200
+        return {"message": "order not found"}, 404
 
     def get(self, id):
         '''get a specific order by id'''
@@ -62,16 +100,7 @@ class SpecificParcel(Resource):
             return {"message": "order deleted successfully"}, 200
         return {"message": "Order not found"}, 404
 
-    def put(self, id):
-        '''approve an  a parcel order'''
-        order = Order().get_by_id(id)
-
-        if order:
-            if order.status != "Pending":
-                return {"message": "order already {}".format(order.status)}, 200
-            order.status = "approved"
-            return {"message": "your parcel order has been approved"}, 200
-        return {"message": "order not found"}, 404
+    
 
 class DeclinedParcels(Resource):
     def get(self):
@@ -180,4 +209,15 @@ class GetAcceptedParcels(Resource):
                 if order.status == "approved"
             ]
         }, 200
+
+
+class GetUserParcels(Resource):
+    '''gets all parcels belonging to a specific user'''
+
+    def get(self):
+
+        return{
+            "User"
+
+        }
 
