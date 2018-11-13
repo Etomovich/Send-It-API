@@ -188,7 +188,7 @@ class TestAllOrders(unittest.TestCase):
 
         self.assertEqual(res.status_code,404)
         self.assertEqual(json.loads(res.data)[
-                         'message'], "please approve the order first")
+                         'message'], "The order could not be found!,check on the id please")
 
     def test_decline_an_order(self):
         '''test for declining an order'''
