@@ -1,14 +1,15 @@
+"""Contain parcels view classes and methods."""
 from flask import request
 from flask_restful import Resource
-from ..models.parcelmodels import Order,orders, accepted_orders, destinations
+from ..models.parcelmodels import Order, orders, destinations
 from ..utils import valid_destination_name, valid_origin_name
 
+
 class CreateParcel(Resource):
-    '''place parcel order.'''
+    """Create a new parcel order."""
 
     def post(self):
-        '''place a new parcel order.'''
-
+        """Post method to create a parcel."""
         data = request.get_json()
         origin = data['origin']
         price = data['price']
@@ -32,28 +33,36 @@ class CreateParcel(Resource):
         if order.destination in destinations:
             orders.append(order)
             return {"message": "Order placed waiting for approval!"}, 201
-        return {"message": "sorry we do not deliver to {}".format(order.destination)}
+        return {"message": "sorry we do not deliver to {}"
+                .format(order.destination)}
 
 
 class GetParcels(Resource):
+    """Class for get parcel method."""
+
     def get(self):
+        """Get method to return all orders."""
         return {"orders": [order.serialize() for order in orders]}
 
 
 class GetUserParcels(Resource):
-    '''gets all parcels belonging to a specific user'''
+    """Class to get parcels by a specific user."""
 
     def get(self, id):
-
+        """Get method to fetch parcels by user id."""
         order = Order().get_by_user_id(id)
         if order:
-            return{"User orders for user {}" .format(id): order.serialize() for order in orders},200
+            return{"User orders for user {}" 
+                   .format(id): order.serialize() for order in orders},200
         return{"message": "no orders found for user {}".format(id)},404
 
 
 
 class CancelSpecificParcel(Resource):
+    """class forcancelling specific parcel."""
+
     def put(self, id):
+        """Put method to change status to cancelled."""
         order = Order().get_by_id(id)
 
         if order:
@@ -68,9 +77,10 @@ class CancelSpecificParcel(Resource):
 
 
 class SpecificParcel(Resource):
-    '''fetch a specific parcel order by id'''
+    """Class for handling specific parcel endpoint."""
+
     def put(self, id):
-        '''approve an  a parcel order'''
+        """Put method to change status to approved."""
         order = Order().get_by_id(id)
 
         if order:
@@ -81,7 +91,7 @@ class SpecificParcel(Resource):
         return {"message": "order not found"}, 404
 
     def get(self, id):
-        '''get a specific order by id'''
+        """Get method to fetch specific parcel orders."""
 
         order = Order().get_by_id(id)
 
@@ -91,7 +101,7 @@ class SpecificParcel(Resource):
         return {"message": "Order not found"}, 404
 
     def delete(self, id):
-        '''delete a specific order'''
+        """Delete method for deleting specific parcel order."""
 
         order = Order().get_by_id(id)
 
@@ -103,9 +113,10 @@ class SpecificParcel(Resource):
     
 
 class DeclinedParcels(Resource):
-    def get(self):
-        '''return all orders'''
+    """Class for handling declined parcel orders."""
 
+    def get(self):
+        """Get method to fetch all declined parcels."""
         return {
             "declined orders": [
                 order.serialize() for order in orders
@@ -114,8 +125,10 @@ class DeclinedParcels(Resource):
         }
 
 class DeclineParcel(Resource):
+    """Admin class for declining parcel order."""
+
     def put(self, id):
-        '''decline a specific order'''
+        """Put method to change parcel status to declined."""
 
         order = Order().get_by_id(id)
 
@@ -130,19 +143,25 @@ class DeclineParcel(Resource):
         return {"message": "Order not found"}, 404
 
 class DeliveredParcels(Resource):
-    '''return a list of parcel orders completed by admin'''
+    """Return a list of parcel orders completed by admin."""
 
     def get(self):
+        """Get method to fetch all deliverd parcels."""
         return {"completed orders": [order.serialize() for order in orders if order.status == "completed"]}, 200
 
 
 class MovingParcels(Resource):
+    """Class to handle orders in transit(moving)."""
+
     def get(self):
+        """Return all moving orders."""
         return {"moving parcels": [order.serialize() for order in orders if order.status == "In Transit"]}
 
 class MarkParcelInTransit(Resource):
+    """Admin class for marking parcel status to moving."""
+
     def put(self, id):
-        '''mark order has started being transported'''
+        """Put method change status to moving."""
         order = Order().get_by_id(id)
 
         if order:
@@ -162,8 +181,10 @@ class MarkParcelInTransit(Resource):
 
 
 class ApproveParcel(Resource):
+    """Admin class for approving parcel."""
+
     def put(self, id):
-        '''mark an order as approved'''
+        """Put method change parcel status to approved."""
 
         order = Order().get_by_id(id)
 
@@ -175,9 +196,12 @@ class ApproveParcel(Resource):
 
         return {"message": "order not found"}, 404
 
+
 class DeliverParcel(Resource):
+    """Admin class for changing parcel status to delivered."""
+
     def put(self, id):
-        '''mark an order as completed by admin'''
+        """Put method change status to delivered."""
         order = Order().get_by_id(id)
 
         if order:
@@ -198,16 +222,13 @@ class DeliverParcel(Resource):
 
 
 class GetAcceptedParcels(Resource):
-    '''Get the Orders accepted by admin'''
+    """Get the Orders accepted by admin."""
 
     def get(self):
-        '''return list of approved orders'''
-
+        """Return list of approved orders."""
         return {
             "approved_orders": [
                 order.serialize() for order in orders
                 if order.status == "approved"
             ]
         }, 200
-
-
