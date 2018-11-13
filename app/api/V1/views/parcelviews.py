@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_restful import Resource
-from ..models.models import Order,orders, accepted_orders, destinations
+from ..models.parcelmodels import Order,orders, accepted_orders, destinations
 from ..utils import valid_destination_name, valid_origin_name
 
 class CreateParcel(Resource):
