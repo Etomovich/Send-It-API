@@ -72,6 +72,14 @@ STEP 2: do flask run to start the server and run the app
 
 11. GET http://127.0.0.1:5000/api/v1/parcels/int
   gets a specific delivery order parcel
+
+
+12. PUT  http://127.0.0.1:5000/api/v1/parcels/<int:id>/cancel
+  cancels  a specific delivery order parcel
+  used endpoint
+
+13. GET http://127.0.0.1:5000/api/v1/users/<int:id>/parcels
+  gets delivery orders palced by a specific user
 =======
 	`
 ## How to test the hosted version:

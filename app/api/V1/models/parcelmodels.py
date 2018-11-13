@@ -45,12 +45,6 @@ class Order:
 
     def get_by_user_id(self, user_id):
 
-        user_orders = []
         for order in orders:
             if order.u_id == user_id:
-                user_orders.append(order)
-                return user_orders
-
-
-
-    
+                return order

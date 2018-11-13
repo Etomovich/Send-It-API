@@ -43,12 +43,12 @@ class GetParcels(Resource):
 class GetUserParcels(Resource):
     '''gets all parcels belonging to a specific user'''
 
-    def get(self, user_id):
+    def get(self, id):
 
-        order = Order().get_by_user_id(user_id)
+        order = Order().get_by_user_id(id)
         if order:
-            return{"User orders for user {}" .format(user_id): order.serialize() for order in orders},200
-        return{"message": "order not found"},404
+            return{"User orders for user {}" .format(id): order.serialize() for order in orders},200
+        return{"message": "no orders found for user {}".format(id)},404
 
 
 
@@ -210,14 +210,4 @@ class GetAcceptedParcels(Resource):
             ]
         }, 200
 
-
-class GetUserParcels(Resource):
-    '''gets all parcels belonging to a specific user'''
-
-    def get(self):
-
-        return{
-            "User"
-
-        }
 
