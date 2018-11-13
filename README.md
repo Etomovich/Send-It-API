@@ -38,11 +38,6 @@ cd app
 STEP 1: export to flask through: export FLASK_APP=run.py 
 STEP 2: do flask run to start the server and run the app
 	`
-
-## Usage
-### Users endpoint
-POST http://127.0.0.1:5000/api/v1/parcels
-GET  http://127.0.0.1:5000/api/v1/parcels
-GET http://127.0.0.1:5000/api/v1/parcels/<int>
-PUT http://127.0.0.1:5000/api/v1/parcels/<int>
-DELETE http://127.0.0.1:5000/api/v1/parcels/<int>
+## How to test the hosted version:
+Heroku app hosted on: sendit123.herokuapp.com/
+place the different endpoints at the end of the above url to test
