@@ -1,8 +1,8 @@
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 [![Build Status](https://travis-ci.com/BrianSerem/Send-It-API.svg?branch=develop)](https://travis-ci.com/BrianSerem/Send-It-API)
 [![Coverage Status](https://coveralls.io/repos/github/BrianSerem/Send-It-API/badge.svg?branch=develop)](https://coveralls.io/github/BrianSerem/Send-It-API?branch=develop)
-
 [![Maintainability](https://api.codeclimate.com/v1/badges/609b635d8231deaa3689/maintainability)](https://codeclimate.com/github/BrianSerem/Send-It-API/maintainability)
+
 # Send-It-API
 api for sendit application, an pp used for sending and tracking parcels across the country
 
