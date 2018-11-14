@@ -71,7 +71,7 @@ class CancelSpecificParcel(Resource):
                 return {"message": "can't cancel,order already {}"
                         .format(order.status)}, 200
             order.status = "cancelled"
-            return{"Message": "parcel order cancelled succesfully"}, 200
+            return{"message": "parcel order cancelled succesfully"}, 200
 
         return {"message": "order not found"}, 404
 

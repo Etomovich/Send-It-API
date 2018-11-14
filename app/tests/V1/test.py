@@ -32,9 +32,20 @@ class TestAllOrders(unittest.TestCase):
             headers={"content-type": "application/json"}
         )
 
-        self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.status_code, 200)
         self.assertEqual(json.loads(res.data)[
-                         'message'], "parcel placed")
+                         'message'], "Order placed waiting for approval")
+
+    def test_cancel_order(self):
+        """Test cancelling an order."""
+        res = self.client.put(
+            "api/v1/<int:id>/cancel",
+            data=json.dumps(self.data),
+            headers={"content-type": "application/json"})
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(json.loads(res.data)[
+                         'message'], "parcel order cancelled succesfully")
 
     def test_get_all_orders(self):
         """Test get all orders endpoint."""
@@ -146,7 +157,14 @@ class TestAllOrders(unittest.TestCase):
         )
         self.assertEqual(res.status_code, 200)
 
-    def test_mark_order_as_in_transit(self):
+    def test_pending_order_list(self):
+        """Test pending orders."""
+        res = self.client.get(
+            "api/v1/parcels/pending",
+            headers={"content-type": "application/json"})
+        self.assertEqual(res.status_code, 200)
+
+    def test_mark_order_as_moving(self):
         """Test mark order as moving."""
         res = self.client.put(
             "api/v1/parcels/1/moving",
@@ -156,7 +174,7 @@ class TestAllOrders(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(json.loads(res.data)[
-                         'message'], "order!,check on the id please")
+                         'message'], "order not found")
 
     def test_decline_an_order(self):
         """Test admin decline order."""
