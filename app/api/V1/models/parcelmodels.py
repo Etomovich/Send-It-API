@@ -12,7 +12,7 @@ class Order:
     user_id = 1
 
     def __init__(self, origin=None,
-                 price=None, destination=None, weight=None, status="Pending"):
+                 price=None, destination=None, weight=None, status="pending"):
         """Initialize the Order class with the required arguments."""
         self.origin = origin
         self.price = price
@@ -43,7 +43,6 @@ class Order:
 
     def get_by_user_id(self, user_id):
         """Get all parcel by a unique user ID."""
-    
         for order in orders:
             if order.u_id == user_id:
                 user_orders.append(order)

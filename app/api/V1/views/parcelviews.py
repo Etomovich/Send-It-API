@@ -1,7 +1,7 @@
 """Contain parcels view classes and methods."""
 from flask import request
 from flask_restful import Resource
-from ..models.parcelmodels import Order, orders, destinations, user_orders
+from ..models.parcelmodels import Order, orders, destinations
 from ..utils import valid_destination_name, valid_origin_name
 
 
@@ -56,8 +56,6 @@ class GetUserParcels(Resource):
                 if order.u_id == user_id
             ]
         }, 200
-        
-
 
 
 class CancelSpecificParcel(Resource):
@@ -68,14 +66,14 @@ class CancelSpecificParcel(Resource):
         order = Order().get_by_id(id)
 
         if order:
-            if order.status == ("Cancelled" or "Moving" or "Delivered"):
+            if order.status == ("cancelled" or "moving" or "delivered"):
 
-                return {"message":"Cannot be cancelled, this order has already been {}".format(order.status)},200
+                return {"message": "can't cancel,order already {}"
+                        .format(order.status)}, 200
             order.status = "cancelled"
-            return{"Message":"parcel order cancelled succesfully"},200
+            return{"Message": "parcel order cancelled succesfully"}, 200
 
-        return {"message":"order not found"},404
-
+        return {"message": "order not found"}, 404
 
 
 class SpecificParcel(Resource):
@@ -87,14 +85,14 @@ class SpecificParcel(Resource):
 
         if order:
             if order.status != "Pending":
-                return {"message": "order already {}".format(order.status)}, 200
+                return {"message": "order already {}"
+                        .format(order.status)}, 200
             order.status = "approved"
             return {"message": "your parcel order has been approved"}, 200
         return {"message": "order not found"}, 404
 
     def get(self, id):
         """Get method to fetch specific parcel orders."""
-
         order = Order().get_by_id(id)
 
         if order:
@@ -104,7 +102,6 @@ class SpecificParcel(Resource):
 
     def delete(self, id):
         """Delete method for deleting specific parcel order."""
-
         order = Order().get_by_id(id)
 
         if order:
@@ -112,7 +109,6 @@ class SpecificParcel(Resource):
             return {"message": "order deleted successfully"}, 200
         return {"message": "Order not found"}, 404
 
-    
 
 class DeclinedParcels(Resource):
     """Class for handling declined parcel orders."""
@@ -126,17 +122,17 @@ class DeclinedParcels(Resource):
             ]
         }
 
+
 class DeclineParcel(Resource):
     """Admin class for declining parcel order."""
 
     def put(self, id):
         """Put method to change parcel status to declined."""
-
         order = Order().get_by_id(id)
 
         if order:
 
-            if order.status != "Pending":
+            if order.status != "pending":
                 return {"message": "order already {}".format(order.status)}
 
             order.status = "declined"
@@ -144,12 +140,23 @@ class DeclineParcel(Resource):
 
         return {"message": "Order not found"}, 404
 
+
 class DeliveredParcels(Resource):
     """Return a list of parcel orders completed by admin."""
 
     def get(self):
         """Get method to fetch all deliverd parcels."""
-        return {"completed orders": [order.serialize() for order in orders if order.status == "completed"]}, 200
+        return {"completed orders": [order.serialize() for order in orders if
+                order.status == "completed"]}, 200
+
+
+class PendingParcels(Resource):
+    """Return all pending parcels."""
+
+    def get(self):
+        """Get method fethes all pending parcels."""
+        return {"Pending parcels": [order.serialize() for order in orders if
+                order.status == ("pending" or "Pending")]}, 200
 
 
 class MovingParcels(Resource):
@@ -157,7 +164,9 @@ class MovingParcels(Resource):
 
     def get(self):
         """Return all moving orders."""
-        return {"moving parcels": [order.serialize() for order in orders if order.status == "In Transit"]}
+        return {"moving parcels": [order.serialize() for order in orders if
+                order.status == "In Transit"]}
+
 
 class MarkParcelInTransit(Resource):
     """Admin class for marking parcel status to moving."""
@@ -167,19 +176,19 @@ class MarkParcelInTransit(Resource):
         order = Order().get_by_id(id)
 
         if order:
-            if order.status == "completed" or order.status == "declined":
-                return {"You already marked the order as {}".format(order.status)}, 200
+            if order.status == ("completed" or "declined"):
+                return {"You already marked the order as {}"
+                        .format(order.status)}, 200
 
-            if order.status == "Pending":
-                return {"message": "please approve the order first"}, 200
+            if order.status == "pending":
+                return {"message": "order should be approved first"}, 200
 
             if order.status == "approved":
-                order.status = "In Transit"
-                return {"message": "The order is now on the road!Rember to keep track of the order"}, 200
+                order.status = "moving"
+                return {"message": "Parcel {}"
+                        .format(id) + " now on road"}, 200
 
-        return {"message": "The order could not be found!,check on the id please"}, 404
-
-
+        return {"message": "order not found"}, 404
 
 
 class ApproveParcel(Resource):
@@ -187,12 +196,12 @@ class ApproveParcel(Resource):
 
     def put(self, id):
         """Put method change parcel status to approved."""
-
         order = Order().get_by_id(id)
 
         if order:
-            if order.status != "Pending":
-                return {"message": "order already {}".format(order.status)}, 200
+            if order.status != "pending":
+                return {"message": "order already {}"
+                        .format(order.status)}, 200
             order.status = "approved"
             return {"message": "your order has been approved"}, 200
 
@@ -207,17 +216,17 @@ class DeliverParcel(Resource):
         order = Order().get_by_id(id)
 
         if order:
-            if order.status == "completed" or order.status == "declined":
-                return {"message": "order already {}".format(order.status)}
+            if order.status == ("delivered" or "declined"):
+                return {"message": "parcel already {}".format(order.status)}
 
-            if order.status == "Pending":
+            if order.status == "pending":
                 return {"message": "please approve the order first "}
 
-            if order.status == "In Transit":
+            if order.status == "moving":
                 order.status = "completed"
                 return {
                     "message":
-                    "Your has been order completed awaiting delivery"
+                    "parcel delivered successfully"
                 }
 
         return {"message": "Order not found"}, 404

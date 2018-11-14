@@ -1,19 +1,18 @@
+"""Contain test cases for the endpoints."""
 import unittest
 import json
-from flask import Flask
 from app import create_app
 
 
 class TestAllOrders(unittest.TestCase):
-    def setUp(self):
-        '''set the app for testing
-        setting a test client for testing'''
+    """Class for testing endpoints."""
 
+    def setUp(self):
+        """Setup method to define data."""
         self.app = create_app()
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
-        
         self.data = {
             "origin": "nairobi",
             "price": 200,
@@ -22,16 +21,14 @@ class TestAllOrders(unittest.TestCase):
         }
 
     def tearDown(self):
-
+        """Tear down method."""
         self.app_context.pop()
 
     def test_create_parcel(self):
-        '''test place a parcel order'''
-        
-
+        """Test create_parcel endpoint."""
         res = self.client.post(
             "api/v1/parcels",
-            data=json.dumps(data),
+            data=json.dumps(self.data),
             headers={"content-type": "application/json"}
         )
 
@@ -40,8 +37,7 @@ class TestAllOrders(unittest.TestCase):
                          'message'], "parcel placed")
 
     def test_get_all_orders(self):
-        '''get all placed orders'''
-
+        """Test get all orders endpoint."""
         res = self.client.get(
             "api/v1/parcels",
             headers={"content-type": "application/json"}
@@ -50,8 +46,7 @@ class TestAllOrders(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     def test_get_orders_in_transit(self):
-        """ return a list of orders in transit """
-
+        """Return a list of orders in transit."""
         res = self.client.get(
             "/api/v1/parcels/moving",
             headers={"content-type": "application/json"}
@@ -60,65 +55,44 @@ class TestAllOrders(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     def test_order_by_id(self):
-        '''get parcel order by id'''
-
+        """Test get_order_by_id."""
         res = self.client.get(
-            "api/v1/parcels/1",data=json.dumps(self.data),
+            "api/v1/parcels/1", data=json.dumps(self.data),
             headers={"content-type": "application/json"}
         )
 
-      
         self.assertEqual(res.status_code, 404)
 
     def test_mark_parcel_as_delivered(self):
-        '''test for parcel orders completed by admin'''
-
+        """Test mark parcel as moving."""
         res = self.client.put(
-            "api/v1/parcels/1/delivered",data=json.dumps(self.data),
+            "api/v1/parcels/1/delivered", data=json.dumps(self.data),
 
             headers={"content-type": "application/json"}
         )
 
-        
         self.assertEqual(json.loads(res.data)[
                          'message'], "Order not found")
 
     def test_declined_parcels_by_admin(self):
-        '''test for returning a list of parcel orders declined by admin'''
-
+        """Test get declined prcels."""
         res = self.client.get(
             "api/v1/parcels/declined",
             headers={"content-type": "application/json"}
         )
         self.assertEqual(res.status_code, 200)
 
-    def test_create_parcel(self):
-        '''method to post an order'''
-        data = {
-            "origin": "kiambu",
-            "price": 20,
-            "destination": "nakuru",
-            "weight": 25
-        }
-        res = self.client.post(
-            "api/v1/parcels",
-            data=json.dumps(data),
-            headers={"content-type": "application/json"}
-        )
-        return res
-
-    def test_cancel_parcel(self):
-        '''test for deleting an order'''
+    def test_delete_parcel(self):
+        """Test delete a parcel."""
         res = self.client.delete(
-            "api/v1/parcels/1",data=json.dumps(self.data),
+            "api/v1/parcels/1", data=json.dumps(self.data),
             headers={"content-type": "application/json"}
 
         )
         self.assertEqual(res.status_code, 404)
 
     def test_get_accepted_parcels(self):
-        '''test for getting a list of all orders accepted by admin'''
-
+        """"Test get accepted orders."""
         res = self.client.get(
             "api/v1/parcels/delivered",
             headers={"content-type": "application/json"}
@@ -126,10 +100,9 @@ class TestAllOrders(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     def test_update_status_approved(self):
-        '''test for a parcel order whose status has been approved'''
-
+        """Test update status to approved."""
         res = self.client.put(
-            "api/v1/parcels/1/approved",data=json.dumps(self.data),
+            "api/v1/parcels/1/approved", data=json.dumps(self.data),
             headers={"content-type": "application/json"}
         )
 
@@ -138,8 +111,7 @@ class TestAllOrders(unittest.TestCase):
                          'message'], "order not found")
 
     def test_completed_orders(self):
-        '''test for returning a list of completed orders'''
-
+        """Test get completed orders."""
         res = self.client.get(
             "api/v1/parcels/delivered",
             headers={"content-type": "application/json"}
@@ -147,8 +119,7 @@ class TestAllOrders(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     def test_non_order_by_id(self):
-        '''testing for a an order that doesn't exist'''
-
+        """Test non_order by specific Id."""
         res = self.client.get(
             "api/v1/parcels/345",
             headers={"content-type": "application/json"}
@@ -158,8 +129,7 @@ class TestAllOrders(unittest.TestCase):
                          'message'], "Order not found")
 
     def test_non_order_delete(self):
-        '''deleting an order that doesn't exist'''
-
+        """Test deletion of null order ."""
         res = self.client.delete(
             "api/v1/parcels/156",
             headers={"content-type": "application/json"}
@@ -169,8 +139,7 @@ class TestAllOrders(unittest.TestCase):
                          'message'], "Order not found")
 
     def test_declined_orders_list(self):
-        '''testing for declined order'''
-
+        """Test get declined orders."""
         res = self.client.get(
             "api/v1/parcels/declined",
             headers={"content-type": "application/json"}
@@ -178,32 +147,31 @@ class TestAllOrders(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
     def test_mark_order_as_in_transit(self):
-        '''test for parcel orders marked intransit by admin'''
-
+        """Test mark order as moving."""
         res = self.client.put(
             "api/v1/parcels/1/moving",
 
             headers={"content-type": "application/json"}
         )
 
-        self.assertEqual(res.status_code,404)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(json.loads(res.data)[
-                         'message'], "The order could not be found!,check on the id please")
+                         'message'], "order!,check on the id please")
 
     def test_decline_an_order(self):
-        '''test for declining an order'''
+        """Test admin decline order."""
         res = self.client.put(
-            "api/v1/parcels/1/declined",data=json.dumps(self.data),
-            headers = {"content-type": "application/json"}
+            "api/v1/parcels/1/declined", data=json.dumps(self.data),
+            headers={"content-type": "application/json"}
         )
-        self.assertEqual(res.status_code,404)
+        self.assertEqual(res.status_code, 404)
 
     def test_invalid_origin_name(self):
-        '''test for invalid origin name'''
+        """Test invalid origin name."""
         data = {
             "origin": "******",
             "price": 20,
-            "destination": "kiambu",
+            "destination": "Nairobi",
             "weight": 5
         }
 
@@ -218,7 +186,7 @@ class TestAllOrders(unittest.TestCase):
                          'message'], "invalid origin name")
 
     def test_invalid_destination(self):
-        '''test for invalid destination'''
+        """Test invalid destination."""
         data = {
             "origin": "nairobi",
             "price": 20,
@@ -237,7 +205,7 @@ class TestAllOrders(unittest.TestCase):
                          'message'], "destination not valid")
 
     def test_invalid_price(self):
-        '''test for invalid  price'''
+        """Test invlid price."""
         data = {
             "origin": "kiambu",
             "price": "kevo",
@@ -255,7 +223,7 @@ class TestAllOrders(unittest.TestCase):
         self.assertEqual(json.loads(res.data)['message'], "Invalid price")
 
     def test_invalid_weight(self):
-        '''test for invalid  price'''
+        """Test invalid weight."""
         data = {
             "origin": "kiambu",
             "price": 50,
