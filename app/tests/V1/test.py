@@ -16,7 +16,7 @@ class TestAllOrders(unittest.TestCase):
         self.data = {
             "origin": "nairobi",
             "price": 200,
-            "destination": "nakuru",
+            "destination": "Nakuru",
             "weight": 20
         }
 
