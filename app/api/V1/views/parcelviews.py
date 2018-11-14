@@ -79,18 +79,6 @@ class CancelSpecificParcel(Resource):
 class SpecificParcel(Resource):
     """Class for handling specific parcel endpoint."""
 
-    def put(self, id):
-        """Put method to change status to approved."""
-        order = Order().get_by_id(id)
-
-        if order:
-            if order.status != "Pending":
-                return {"message": "order already {}"
-                        .format(order.status)}, 200
-            order.status = "approved"
-            return {"message": "your parcel order has been approved"}, 200
-        return {"message": "order not found"}, 404
-
     def get(self, id):
         """Get method to fetch specific parcel orders."""
         order = Order().get_by_id(id)
