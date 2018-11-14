@@ -1,7 +1,7 @@
 """Contain parcels view classes and methods."""
 from flask import request
 from flask_restful import Resource
-from ..models.parcelmodels import Order, orders, destinations
+from ..models.parcelmodels import Order, orders, destinations, user_orders
 from ..utils import valid_destination_name, valid_origin_name
 
 
@@ -48,13 +48,15 @@ class GetParcels(Resource):
 class GetUserParcels(Resource):
     """Class to get parcels by a specific user."""
 
-    def get(self, id):
+    def get(self, user_id):
         """Get method to fetch parcels by user id."""
-        order = Order().get_by_user_id(id)
-        if order:
-            return{"User orders for user {}" 
-                   .format(id): order.serialize() for order in orders},200
-        return{"message": "no orders found for user {}".format(id)},404
+        return {
+            "Parcel orders for user {}".format(user_id): [
+                order.serialize() for order in orders
+                if order.u_id == user_id
+            ]
+        }, 200
+        
 
 
 
