@@ -39,7 +39,7 @@ class TestAllOrders(unittest.TestCase):
     def test_cancel_order(self):
         """Test cancelling an order."""
         res = self.client.put(
-            "api/v1/<int:id>/cancel",
+            "api/v1/parcels/<int:id>/cancel",
             data=json.dumps(self.data),
             headers={"content-type": "application/json"})
 
