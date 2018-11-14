@@ -34,7 +34,7 @@ class TestAllOrders(unittest.TestCase):
 
         self.assertEqual(res.status_code, 201)
         self.assertEqual(json.loads(res.data)[
-                         'message'], "Order placed waiting for approval")
+                         'message'], "Order placed waiting for approval!")
 
     def test_cancel_order(self):
         """Test cancelling an order."""
@@ -44,8 +44,6 @@ class TestAllOrders(unittest.TestCase):
             headers={"content-type": "application/json"})
 
         self.assertEqual(res.status_code, 404)
-        self.assertEqual(json.loads(res.data)[
-                         'message'], "parcel order cancelled succesfully")
 
     def test_get_all_orders(self):
         """Test get all orders endpoint."""
