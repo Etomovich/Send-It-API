@@ -223,10 +223,10 @@ class DeliverParcel(Resource):
                 return {"message": "please approve the order first "}
 
             if order.status == "moving":
-                order.status = "completed"
+                order.status = "delivered"
                 return {
                     "message":
-                    "parcel delivered successfully"
+                    "parcel {}".format(id) + " delivered successfully"
                 }
 
         return {"message": "Order not found"}, 404
