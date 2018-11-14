@@ -1,6 +1,6 @@
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
-[![Build Status](https://travis-ci.com/BrianSerem/Send-It-API.svg?branch=ft-addition-of-cancel-order-endpoint-161920869)](https://travis-ci.com/BrianSerem/Send-It-API)
-[![Coverage Status](https://coveralls.io/repos/github/BrianSerem/Send-It-API/badge.svg?branch=ft-addition-of-cancel-order-endpoint-161920869)](https://coveralls.io/github/BrianSerem/Send-It-API?branch=ft-addition-of-cancel-order-endpoint-161920869)
+[![Build Status](https://travis-ci.com/BrianSerem/Send-It-API.svg?branch=ft-get-user-parcel-endpoint-161952802)](https://travis-ci.com/BrianSerem/Send-It-API)
+[![Coverage Status](https://coveralls.io/repos/github/BrianSerem/Send-It-API/badge.svg?branch=ft-get-user-parcel-endpoint-161952802)](https://coveralls.io/github/BrianSerem/Send-It-API?branch=ft-get-user-parcel-endpoint-161952802)
 
 
 # Send-It-API
