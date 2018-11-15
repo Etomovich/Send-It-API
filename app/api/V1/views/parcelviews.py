@@ -1,6 +1,7 @@
 """Contain parcels view classes and methods."""
 from flask_restful import Resource, reqparse
 from ..models.parcelmodels import Order, orders, destinations
+from ..models.usermodels import User, users
 from ..utils import valid_destination_name, valid_origin_name
 
 class UserRegistration(Resource):
