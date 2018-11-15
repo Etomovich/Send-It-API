@@ -23,64 +23,50 @@ There are two implemented models: User and Todo, one user has many todos.
 
 https://github.com/BrianSerem/Send-It-API.git
 
-2. Create and activate a virtual environment inside the folder after cloning
+### Create and activate a virtual environment
 
-source  <environmentname>/bin/activate
+    virtualenv env --python=python3.6
 
-2. Install the dependencieslone 
-	`pip install requirements.txt`
- 
-3. Cd into app where run.py is located.
-cd app
-  
+    source env/bin/activate
 
-4. How to run the app.
-STEP 1: export to flask through: export FLASK_APP=run.py 
-STEP 2: do flask run to start the server and run the app
-<<<<<<< HEAD
-	
-### The following endpoints are currently working:
-1. POST http://127.0.0.1:5000/api/v1/parcels
- creating a new parcel order. 
+### Install required Dependencies
 
-2. GET http://127.0.0.1:5000/api/v1/parcels
- gets all parcel orders. pending,approved, delivered and declined.
+    pip install -r requirements.txt
 
-3. GET http://127.0.0.1:5000/api/v1/parcels/approved
- gets all approved parcel orders.
+## Running the application
 
-4. GET http://127.0.0.1:5000/api/v1/parcels/declined
- gets all declined parcel orders.
+```
+$ export FLASK_APP="run.py"
+$ export FLASK_DEBUG=1
+$ export APP_SETTINGS="development"
+```
+### Open Terminal and type
+$ flask run
 
-5. GET http://127.0.0.1:5000/api/v1/parcels/moving
- gets all  parcel orders in transit(moving).
-
-6. GET http://127.0.0.1:5000/api/v1/parcels/delivered
- gets all delivered parcel orders.
-
-7. PUT http://127.0.0.1:5000/api/v1/parcels/int/approved
- admin endpoint to change status to approved
-
-8. PUT http://127.0.0.1:5000/api/v1/parcels/int/moving
- admin endpoint to change status to moving
-
-9. PUT http://127.0.0.1:5000/api/v1/parcels/int/declined
- admin endpoint to change status to declined
-
-10. PUT http://127.0.0.1:5000/api/v1/parcels/int/delivered
- admin endpoint to change status to delivered
-
-11. GET http://127.0.0.1:5000/api/v1/parcels/int
-  gets a specific delivery order parcel
+### Open postman and use the below endpoints.
 
 
-12. PUT  http://127.0.0.1:5000/api/v1/parcels/<int:id>/cancel
-  cancels  a specific delivery order parcel
-  used endpoint
+## Endpoints currently available
+| Method | Endpoint                        | Description                           | User-type         |
+| ------ | ------------------------------- | ------------------------------------- | ------------  |
+|1.POST   | /api/v1/parcels                | Creates a new parcel order.           | ucustomers        |
+|2.GET   | /api/v1/parcels                 | get all parcel orders                    | admin         |
+|3.GET    |/api/v1/parcels/int      | Get a specific parcel order          | users/admin   |
+| 4.GET    | /api/v1/parcels/approved          | get approved parcel orders            | User          |
+| GET    | /api/v1/parcels/approved         | gets all approved parcel orders       |user           |
+| PUT    |/api/v1/parcels/declined         | gets all declined orders              | Admin         |
+| PUT    | /api/v1/parcels/moving          | gets all parcel orders currently in transit                 | Users         |
+| POST   | /api/v1/parcels/approved              | gets all pending parcel orders              | Users/Admin   |
+| GET    | /api/v1/parcels/int/delivered   | changes parcel status to delivered           | user/Admin    |
+| GET    | api/v1/parcels/int/approved          | changes parcel status to approved                | Admin/users   |
+| DELETE | /api/v1/parcels/int/declined               | changes parcel status to declined              | Admin/users   |
+| PUT    | /api/v1/parcels/int/moving     | changes parcel status to moving                    | Admin         |
+| PUT    | /api/v1/parcels/int/cancel     | cancels a parcel order     | Admin         |
+| PUT    | /api/v1/users/int/parcels      | gets all parcels orders for a user               | Admin         |
+| GET    | /api/v1/parcels/int/destination| changes parcel order destination             | Admin/users    
 
-13. GET http://127.0.0.1:5000/api/v1/users/<int:id>/parcels
-  gets delivery orders palced by a specific user
-=======
+
+
 	`
 ## How to test the hosted version:
 Heroku app hosted on: sendit123.herokuapp.com/
