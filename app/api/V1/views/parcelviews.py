@@ -11,7 +11,7 @@ class CreateParcel(Resource):
         """Post method to create a parcel."""
         parser = reqparse.RequestParser()
         parser.add_argument('destination', help='invalid name, check again', required=True)
-        parser.add_argument('price', help='invalid price', type=int, required=True)
+        parser.add_argument('price', help='Invalid price', type=int, required=True)
         parser.add_argument('weight', help='Invalid weight', type=int, required=True)
         parser.add_argument('origin', help='invalid name, check again', required=True)
         data = parser.parse_args()
