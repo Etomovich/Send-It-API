@@ -3,7 +3,23 @@ from flask_restful import Resource, reqparse
 from ..models.parcelmodels import Order, orders, destinations
 from ..utils import valid_destination_name, valid_origin_name
 
+class UserRegistration(Resource):
+    """Class creates user registration method."""
 
+    def post(self):
+        """Get method fetch user data."""
+        parser=reqparse.RequestParser()
+        parser.add_argument('username', help = 'invalid name, check again', required = True)
+        parser.add_argument('email', help = 'invalid name, check again', required = True)
+        parser.add_argument('password', help = 'invalid name, check again', required = True)
+        data = parser.parse_args()
+        username = data['username']
+        email = data['email']
+        password = data['password']
+
+        user = User(username, email, password)
+        users.append(user)
+        return {"message":"user info captured"}
 class CreateParcel(Resource):
     """Create a new parcel order."""
 
