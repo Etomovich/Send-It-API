@@ -8,8 +8,8 @@ from app import db_config
 def create_app():
     """Crete app fuction."""
     app = Flask(__name__)
-    create_orders_table()
-    create_users_table()
+    db_config.create_orders_table()
+    db_config.create_users_table()
     app.register_blueprint(version_1)
     app.register_blueprint(version_2)
 
