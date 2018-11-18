@@ -254,7 +254,7 @@ class TestAllOrders(unittest.TestCase):
         )
 
         self.assertEqual(res.status_code, 400)
-        self.assertEqual(json.loads(res.data)['message'], {'weight': 'Invalid price'})
+        self.assertEqual(json.loads(res.data)['message'], {'weight': 'Invalid weight'})
 
 
 if __name__ == '__main__':
