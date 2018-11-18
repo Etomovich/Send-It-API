@@ -236,7 +236,7 @@ class TestAllOrders(unittest.TestCase):
         )
 
         self.assertEqual(res.status_code, 400)
-        self.assertEqual(json.loads(res.data)['message'], "Invalid price")
+        self.assertEqual(json.loads(res.data)['message'], {'price': 'Invalid price'})
 
     def test_invalid_weight(self):
         """Test invalid weight."""
@@ -254,7 +254,7 @@ class TestAllOrders(unittest.TestCase):
         )
 
         self.assertEqual(res.status_code, 400)
-        self.assertEqual(json.loads(res.data)['message'], "Invalid weight")
+        self.assertEqual(json.loads(res.data)['message'], {'weight': 'Invalid price'})
 
 
 if __name__ == '__main__':

@@ -1,6 +1,5 @@
 """Contain parcels view classes and methods."""
-from flask import request
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from ..models.parcelmodels import Order, orders, destinations
 from ..utils import valid_destination_name, valid_origin_name
 
@@ -10,7 +9,12 @@ class CreateParcel(Resource):
 
     def post(self):
         """Post method to create a parcel."""
-        data = request.get_json()
+        parser = reqparse.RequestParser()
+        parser.add_argument('destination', help='invalid name, check again', required=True)
+        parser.add_argument('price', help='Invalid price', type=int, required=True)
+        parser.add_argument('weight', help='Invalid weight', type=int, required=True)
+        parser.add_argument('origin', help='invalid name, check again', required=True)
+        data = parser.parse_args()
         origin = data['origin']
         price = data['price']
         destination = data['destination']
@@ -21,12 +25,6 @@ class CreateParcel(Resource):
 
         if not valid_origin_name(origin):
             return {'message': "invalid origin name"}, 400
-
-        if type(price) != int:
-            return {'message': "Invalid price"}, 400
-
-        if type(weight) != int:
-            return {'message': "Invalid weight"}, 400
 
         order = Order(origin, price, destination, weight)
 
@@ -211,10 +209,10 @@ class DeliverParcel(Resource):
                 return {"message": "please approve the order first "}
 
             if order.status == "moving":
-                order.status = "completed"
+                order.status = "delivered"
                 return {
                     "message":
-                    "parcel delivered successfully"
+                    "parcel {}".format(id) + " delivered successfully"
                 }
 
         return {"message": "Order not found"}, 404
