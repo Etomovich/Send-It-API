@@ -98,7 +98,7 @@ class TestAllOrders(unittest.TestCase):
             headers={"content-type": "application/json"}
 
         )
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 200)
 
     def test_get_accepted_parcels(self):
         """"Test get accepted orders."""
@@ -180,7 +180,7 @@ class TestAllOrders(unittest.TestCase):
             "api/v1/parcels/1/declined", data=json.dumps(self.data),
             headers={"content-type": "application/json"}
         )
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 200)
 
     def test_invalid_origin_name(self):
         """Test invalid origin name."""
