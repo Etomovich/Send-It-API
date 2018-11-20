@@ -8,7 +8,7 @@ install:
   - pip install coveralls
 before_script:
   - psql -c 'CREATE DATABASE SENDIT' -U postgres
-  - psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to postgres;" -U postgres
+  - psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to brian;" -U postgres
 script:
   - nosetests --with-coverage --cover-package=app
 
