@@ -1,7 +1,7 @@
 """Contain db connection fuctions."""
 import psycopg2
 
-url = "dbname=data host=localhost user=foo password= bar"
+url = "dbname=maindb host=localhost user=foo password= bar"
 
 
 def connection(url):
