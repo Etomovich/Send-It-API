@@ -7,7 +7,8 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls
 before_script:
-  -psql -c 'CREATE USER brian WITH PASSWORD 'brian';' -U postgres
+  - psql -c 'CREATE DATABASE SENDIT' -U postgres
+  - psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public to postgres;" -U postgres
 script:
   - nosetests --with-coverage --cover-package=app
 
