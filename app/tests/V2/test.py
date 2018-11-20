@@ -48,7 +48,7 @@ class TestAllOrders(unittest.TestCase):
             data = json.dumps(self.userdata),
             headers = {"content-type":"application/json"})
 
-        self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.status_code, 400)
 
    
     def test_cancel_order(self):
