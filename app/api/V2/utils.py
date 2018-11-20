@@ -23,10 +23,3 @@ def validate_input(input):
     '''validate input'''
     regex = "^[a-zA-Z0-9_]{1,20}$"
     return re.match(regex,input)   
-
-
-    
-def valid_destination(destination):
-    '''validate destination name'''
-    regex = "^[a-zA-Z 0-9]{3,}$"
-    return re.match(regex, destination)

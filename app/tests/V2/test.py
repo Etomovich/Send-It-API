@@ -19,6 +19,11 @@ class TestAllOrders(unittest.TestCase):
             "destination": "Nakuru",
             "weight": 20
         }
+        self.userdata = {
+        "username":"brianserems",
+        "password":"idfwu8080",
+        "email":"b@ushacks.com"
+        }
 
     def tearDown(self):
         """Tear down method."""
@@ -35,7 +40,15 @@ class TestAllOrders(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         self.assertEqual(json.loads(res.data)[
                          'message'], "Order placed waiting for approval!")
+    
+    def test_user_registration(self):
+        """Test registering user."""
+        res = self.client.post(
+            "api/v2/parcels",
+            data = json.dumps(self.userdata),
+            headers = {"content-type":"application/json"})
 
+   
     def test_cancel_order(self):
         """Test cancelling an order."""
         res = self.client.put(
@@ -180,7 +193,7 @@ class TestAllOrders(unittest.TestCase):
             "api/v2/parcels/1/declined", data=json.dumps(self.data),
             headers={"content-type": "application/json"}
         )
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 200)
 
     def test_invalid_origin_name(self):
         """Test invalid origin name."""
