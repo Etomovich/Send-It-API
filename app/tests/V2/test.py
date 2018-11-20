@@ -48,6 +48,8 @@ class TestAllOrders(unittest.TestCase):
             data = json.dumps(self.userdata),
             headers = {"content-type":"application/json"})
 
+        self.assertEqual(res.status_code, 201)
+
    
     def test_cancel_order(self):
         """Test cancelling an order."""
@@ -112,7 +114,7 @@ class TestAllOrders(unittest.TestCase):
 
         )
         self.assertEqual(res.status_code, 200)
-        
+
 
     def test_get_accepted_parcels(self):
         """"Test get accepted orders."""
