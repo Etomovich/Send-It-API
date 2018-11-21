@@ -1,38 +1,30 @@
 """Contain parcels view classes and methods."""
 from flask_restful import Resource, reqparse
 from ..models.parcelmodels import Order, orders, destinations
-from ..models.usermodels import User
+from ..models.usermodels import User, connection
 from ..utils import valid_destination_name, valid_origin_name
+from flask_jwt_extended import (create_refresh_token,jwt_refresh_token_required,jwt_required)
+from flask_jwt_extended import get_jwt_identity
 
 class CreateParcel(Resource):
     """Create a new parcel order."""
-
+    @jwt_required
     def post(self):
         """Post method to create a parcel."""
+        current_userid = get_jwt_identity()
         parser = reqparse.RequestParser()
         parser.add_argument('destination', help='invalid name, check again', required=True)
-        parser.add_argument('price', help='Invalid price', type=int, required=True)
         parser.add_argument('weight', help='Invalid weight', type=int, required=True)
         parser.add_argument('origin', help='invalid name, check again', required=True)
         data = parser.parse_args()
-        origin = data['origin']
-        price = data['price']
-        destination = data['destination']
-        weight = data['weight']
 
-        if not valid_destination_name(destination):
-            return {'message': "destination not valid"}, 400
-
-        if not valid_origin_name(origin):
-            return {'message': "invalid origin name"}, 400
-
-        order = Order(origin, price, destination, weight)
-
-        if order.destination in destinations:
-            orders.append(order)
-            return {"message": "Order placed waiting for approval!"}, 201
-        return {"message": "sorry we do not deliver to {}"
-                .format(order.destination)}
+       
+        query = "INSERT INTO orders (destination, origin, price, weight, user_id) VALUES (%s,%s,%s,%s,%s)"
+        
+        curobject = connection.cursor()
+        curobject.execute(query, (data['destination'],data['origin'],data['weight']*20,data['weight'],current_userid))
+        connection.commit()
+        return {"message":"parcel craeted, waiting approval"}, 201
 
 
 class GetParcels(Resource):

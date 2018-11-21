@@ -57,3 +57,11 @@ class UserLogin(Resource):
             return {"message":"invalid password, try again"}, 
 
         return{"message":"user not found please register"}, 404
+
+class TokenRefresh(Resource):
+    def post(self):
+        # retrive the user's identity from the refresh token using a Flask-JWT-Extended built-in method
+        user = get_jwt_identity()
+        # return a non-fresh token for the user
+        new_token = create_access_token(identity=user, fresh=False)
+        return {'refreshed token': new_token}, 200
