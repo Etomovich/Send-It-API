@@ -1,7 +1,7 @@
 """Contain db connection fuctions."""
 import psycopg2
 
-url = "dbname=maindb host=localhost user=foo password= bar"
+url = "dbname=data host=localhost user=brian password= brian"
 
 
 def connection(url):
@@ -24,6 +24,7 @@ def create_orders_table():
     origin CHARACTER VARYING(200) NOT NULL,
     price SERIAL  NOT NULL,
     weight SERIAL  NOT NULL,
+    status CHARACTER VARYING(200) DEFAULT 'pending',
     user_id SERIAL  NOT NULL) ; """
 
     conn = init_db()
@@ -35,11 +36,12 @@ def create_orders_table():
 
 def create_users_table():
     """Create users table."""
-    query = """CREATE TABLE IF NOT EXISTS customers2(
+    query = """CREATE TABLE IF NOT EXISTS users(
     userid SERIAL PRIMARY KEY,
     role CHARACTER VARYING(200),
     username CHARACTER VARYING(200) NOT NULL,
     email CHARACTER VARYING(200) NOT NULL,
+    phone SERIAL,
     password CHARACTER VARYING(200) NOT NULL);"""
 
     conn = init_db()
