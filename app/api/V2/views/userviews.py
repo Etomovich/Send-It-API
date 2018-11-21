@@ -29,10 +29,7 @@ class UserRegistration(Resource):
             user = User().get_user_by_username(data['username'])
             access_token = create_access_token(identity=user.user_id, fresh=True)
             refresh_token = create_refresh_token(user.user_id)
-            # return {"access token":access_token}, 201
-            return {"user info":user.serialize_user()}
-        
-            return {"error":"error connecting to the database"}, 404
+            return {"access token":access_token}, 200
         
         return{"error":"username {} is already taken".format(data['username'])}, 404
 
