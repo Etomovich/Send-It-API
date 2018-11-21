@@ -10,7 +10,7 @@ from flask_jwt_extended import JWTManager
 def create_app():
     """Crete app fuction."""
     app = Flask(__name__)
-    app.secret_key = os.getenv("secret_key")
+    app.secret_key = os.getenv("secret_key") or "brian"
     db_config.create_orders_table()
     db_config.create_users_table()
     app.register_blueprint(version_1)

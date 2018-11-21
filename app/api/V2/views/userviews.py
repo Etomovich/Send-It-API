@@ -23,17 +23,15 @@ class UserRegistration(Resource):
 
         user = User().get_user_by_username(data['username'])
         if not user:
-            try:
-                cursorobject = connection.cursor() 
-                curobject.execute(query, (data['username'], data['email'],data['password'],data['phone'],data['role']))
-                connection.commit()
-                user = User().get_by_user_username(data['username'])
-                access_token = create_access_token(identity=user.id, fresh=True)
-                refresh_token = create_refresh_token(user.id)
-                return {"access token":access_token}, 201
-                
-            except:
-                return {"error":"error connecting to the database"}, 404
+            curobject = connection.cursor() 
+            curobject.execute(query, (data['username'], data['email'],data['password'],data['phone'],data['role']))
+            connection.commit()
+            user = User().get_user_by_username(data['username'])
+            access_token = create_access_token(identity=user.id, fresh=True)
+            refresh_token = create_refresh_token(user.id)
+            return {"access token":access_token}, 201
+        
+            return {"error":"error connecting to the database"}, 404
         
         return{"error":"username {} is already taken".format(data['username'])}, 404
 
