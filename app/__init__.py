@@ -7,5 +7,4 @@ def create_app():
     app.register_blueprint(version_1)
 
     return app
-nnvfv
  
