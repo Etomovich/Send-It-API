@@ -1,27 +1,21 @@
-"""Stores all orders in a list."""
-orders = []
-user_orders = []
-accepted_orders = []
-destinations = ['Nairobi', 'Nakuru', 'Kisumu']
-
+"""Create a order object form the class."""
 
 class Order:
     """Contain parcel and user fuctions."""
 
-    order_id = 1
-    user_id = 1
-
-    def __init__(self, origin=None,
-                 price=None, destination=None, weight=None, status="pending"):
+    def __init__(self, order_id=None, destination=None, origin=None,
+                 price=None,  weight=None, status=None, user_id=None, 
+                 curr_location=None):
         """Initialize the Order class with the required arguments."""
         self.origin = origin
         self.price = price
         self.destination = destination
         self.weight = weight
-        self.id = Order.order_id
+        self.order_id = order_id
         self.status = status
-        self.u_id = Order.user_id
-        Order.order_id += 1
+        self.curr_location = curr_location
+        self.user_id=user_id
+        
 
     def serialize(self):
         """Return tuple as dictionary."""
@@ -32,7 +26,8 @@ class Order:
             destination=self.destination,
             weight=self.weight,
             status=self.status,
-            u_id=self.u_id
+            u_id=self.u_id,
+            curr_location=self.curr_location
         )
 
     def get_by_id(self, order_id):

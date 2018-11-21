@@ -25,7 +25,8 @@ def create_orders_table():
     price SERIAL  NOT NULL,
     weight SERIAL  NOT NULL,
     status CHARACTER VARYING(200) DEFAULT 'pending',
-    user_id SERIAL  NOT NULL ) ; """
+    user_id SERIAL  NOT NULL ,
+    curr_location CHARACTER VARYING(200) DEFAULT 'sendithq') ; """
 
     conn = init_db()
     cur = conn.cursor()
