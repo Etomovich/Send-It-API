@@ -30,15 +30,17 @@ class Order:
             curr_location=self.curr_location
         )
 
-    def get_by_id(self, order_id):
-        """Get a single item by unique id."""
-        for order in orders:
-            if order.id == order_id:
-                return order
+    @classmethod
+    def get_order_by_orderid(cls, order_id):
+        """Find an order by order_id."""
+        cursor_object = connection.cursor()
+        query = """SELECT * FROM orders WHERE order_id= %s"""
+        cursor_object.execute(query, (order_id,))
+        row = cursor_object.fetchone()
+        if row:
+            order = cls(*row)
+        else:
+            order = None
+        return order
 
-    def get_by_user_id(self, user_id):
-        """Get all parcel by a unique user ID."""
-        for order in orders:
-            if order.u_id == user_id:
-                user_orders.append(order)
-                return user_orders
+    

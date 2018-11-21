@@ -7,32 +7,33 @@ connection = init_db()
 class User:
     """Class for user object."""
 
-    def __init__(self, _id=None, role=None, username=None, email=None, password=None, phone=None):
+    def __init__(self, user_id=None, role=None, username=None, email=None, phone =None, password=None):
         """Initialize User class."""
         self.username = username
         self.email = email
         self.password = password
-        self.id = _id
+        self.user_id = user_id
         self.role = role
         self.phone = phone
 
     def serialize_user(self):
         """Return tuple as user dictionary."""
         return dict(
-            id=self.id,
+            id=self.user_id,
             username=self.username,
             email=self.email,
             role=self.role,
-            phone=self.phone
+            phone=self.phone,
+            password = self.password
         )
 
     @classmethod
     def get_user_by_username(cls, username):
         """Find a user by username."""
-        curobject = connection.cursor()
+        cursor_object = connection.cursor()
         query = """SELECT * FROM users WHERE username= %s"""
-        curobject.execute(query, (username,))
-        row = curobject.fetchone()
+        cursor_object.execute(query, (username,))
+        row = cursor_object.fetchone()
         if row:
             user = cls(*row)
         else:
@@ -44,8 +45,8 @@ class User:
         """Find a user by id."""
         cursorobject = connection.cursor()
         query = "SELECT * FROM users WHERE userid= %s"
-        curobject.execute(query, (_id,))
-        row = curobject.fetchone()
+        cursor_object.execute(query, (_id,))
+        row = cursor_object.fetchone()
         if row:
             user = cls(*row)
         else:
