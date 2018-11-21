@@ -32,7 +32,7 @@ class GetUserParcels(Resource):
 
     def get(self, user_id):
         """Get all parcel by a unique user ID."""
-        current_user_orders=[]
+        current_orders=[]
         cursor_object = connection.cursor()
         query = """SELECT * FROM orders WHERE user_id= %s"""
         cursor_object.execute(query, (user_id,))
@@ -42,13 +42,24 @@ class GetUserParcels(Resource):
         for row in rows:
             order = Order(*row)
             current_user_orders.append(order)
-            return{"user {} orders".format(user_id):[order.serialize_order() for order in current_user_oders]}, 200
+            return{"user {} orders".format(user_id):[order.serialize_order() for order in current_oders]}, 200
+
 class GetParcels(Resource):
     """Class for get parcel method."""
 
     def get(self):
         """Get method to return all orders."""
-        return {"orders": [order.serialize() for order in current_user_orders]}
+        current_orders=[]
+        cursor_object = connection.cursor()
+        query = """SELECT * FROM orders """
+        cursor_object.execute(query)
+        rows = cursor_object.fetchall()
+        if len(rows)==0:
+            return{"error":"no parcels found"}, 404
+        for row in rows:
+            order = Order(*row)
+            current_user_orders.append(order)
+            return{"All orders":[order.serialize_order() for order in current_oders]}, 200
 
 
 
