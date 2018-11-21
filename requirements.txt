@@ -17,4 +17,6 @@ pytz==2018.7
 six==1.11.0
 SQLAlchemy==1.2.13
 Werkzeug==0.14.1
-
+Flask-JWT-Extended==3.13.1
+PyJWT==1.6.4
+Werkzeug==0.14.1

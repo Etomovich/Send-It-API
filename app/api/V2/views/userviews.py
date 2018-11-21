@@ -15,24 +15,20 @@ class UserRegistration(Resource):
         parser.add_argument('email', help='invalid name, check again', required = True)
         parser.add_argument('password', help='invalid name, check again', required = True)
         parser.add_argument('phone', help='invalid name, check again', required= True)
-        parser.add_argument('role', help='invalid name, check again', required= True)
 
         data = parser.parse_args()
 
-        query = """INSERT INTO users (username, email, password, phone, role) VALUES (%s,%s,%s,%s,%s)"""
+        query = """INSERT INTO users (username, email, password, phone) VALUES (%s,%s,%s,%s)"""
 
         user = User().get_user_by_username(data['username'])
         if not user:
             cursor_object = connection.cursor() 
-            cursor_object.execute(query, (data['username'], data['email'],data['password'],data['phone'],data['role']))
+            cursor_object.execute(query, (data['username'], data['email'],data['password'],data['phone'],))
             connection.commit()
             user = User().get_user_by_username(data['username'])
             access_token = create_access_token(identity=user.user_id, fresh=True)
             refresh_token = create_refresh_token(user.user_id)
-            # return {"access token":access_token}, 201
-            return {"user info":user.serialize_user()}
-        
-            return {"error":"error connecting to the database"}, 404
+            return {"access token":access_token}, 200
         
         return{"error":"username {} is already taken".format(data['username'])}, 404
 

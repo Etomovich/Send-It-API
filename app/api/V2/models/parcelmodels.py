@@ -1,4 +1,9 @@
 """Create a order object form the class."""
+import psycopg2
+from flask import app
+from app.db_config import init_db
+
+connection = init_db()
 
 class Order:
     """Contain parcel and user fuctions."""
@@ -17,16 +22,16 @@ class Order:
         self.user_id=user_id
         
 
-    def serialize(self):
+    def serialize_order(self):
         """Return tuple as dictionary."""
         return dict(
-            id=self.id,
+            id=self.order_id,
             origin=self.origin,
             price=self.price,
             destination=self.destination,
             weight=self.weight,
             status=self.status,
-            u_id=self.u_id,
+            user_id=self.user_id,
             curr_location=self.curr_location
         )
 

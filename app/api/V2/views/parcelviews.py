@@ -41,7 +41,7 @@ class GetUserParcels(Resource):
             return{"error":"user {} has no parces".format(user_id)}, 404
         for row in rows:
             order = Order(*row)
-            current_user_orders.append(order)
+            current_orders.append(order)
             return{"user {} orders".format(user_id):[order.serialize_order() for order in current_oders]}, 200
 
 class GetParcels(Resource):
@@ -58,184 +58,62 @@ class GetParcels(Resource):
             return{"error":"no parcels found"}, 404
         for row in rows:
             order = Order(*row)
-            current_user_orders.append(order)
-            return{"All orders":[order.serialize_order() for order in current_oders]}, 200
+            current_orders.append(order)
+            return{"All orders":[order.serialize_order() for order in current_orders]}, 200
 
+class ChangeParcelDestination(Resource):
+    """class for changing parcel destination."""
+    @jwt_required
+    def put(self, order_id):
+        """Put method changes parcel destination."""
+        parser=reqparse.RequestParser()
+        parser.add_argument("destination",help ="Invalid name check again", required=True)
+        data=parser.parse_args()
 
-
-    
-
-
-class CancelSpecificParcel(Resource):
-    """class forcancelling specific parcel."""
-
-    def put(self, id):
-        """Put method to change status to cancelled."""
-        order = Order().get_by_id(id)
-
+        query = "UPDATE orders SET destination = %s WHERE order_id = %s"
+        user_id = get_jwt_identity()
+        order = Order().get_order_by_orderid(order_id)
         if order:
-            if order.status == ("cancelled" or "moving" or "delivered"):
+            if order.user_id == user_id:
+                if order.status == "delivered" or order.status == "cancelled":
+                    return{"error":"can't change, this already {}".format(order.status)}, 404
+                cursor_object = connection.cursor()
+                cursor_object.execute(query,(data['destination'],order_id,))
+                connection.commit()
+                return{"success":"destination changed to{}".format(data['destination'])}, 200
+        return{"error":"order not found"},404
 
-                return {"message": "can't cancel,order already {}"
-                        .format(order.status)}, 200
-            order.status = "cancelled"
-            return{"message": "parcel order cancelled succesfully"}, 200
-
-        return {"message": "order not found"}, 404
-
-
-class SpecificParcel(Resource):
-    """Class for handling specific parcel endpoint."""
-
-    def get(self, id):
-        """Get method to fetch specific parcel orders."""
-        order = Order().get_by_id(id)
-
+class GetSpecificParcel(Resource):
+    """Class to get a specifi parcel order."""
+    def get(self, order_id):
+        """Get method fetch a specific parcel."""
+        order = Order().get_order_by_orderid(order_id)
         if order:
-            return {"order": order.serialize()}, 200
-
-        return {"message": "Order not found"}, 404
-
-    def delete(self, id):
-        """Delete method for deleting specific parcel order."""
-        order = Order().get_by_id(id)
-
-        if order:
-            orders.remove(order)
-            return {"message": "order deleted successfully"}, 200
-        return {"message": "Order not found"}, 404
+            return{"message":"order {} details"[order.serialize_order()].format(order_id)}
 
 
-class DeclinedParcels(Resource):
-    """Class for handling declined parcel orders."""
+class ChangeParcelStatus(Resource):
+    """Admin class to change parcel status."""
+    @jwt_required
+    def put(self, order_id):
+        """Put method updates parcel status."""
+        query = "UPDATE orders SET destination = %s WHERE order_id = %s"
 
-    def get(self):
-        """Get method to fetch all declined parcels."""
-        return {
-            "declined orders": [
-                order.serialize() for order in orders
-                if order.status == "declined"
-            ]
-        }
+        parser=reqparse.RequestParser()
+        parser.add_argument("newstatus",help ="Invalid name check again", required=True)
+        data=parser.parse_args()
 
+        current_userid = get_jwt_identity()
+        user = get_user_by_userid(current_userid)
+        if user:
+            if user.role == "admin":
+                order = Order().get_order_by_orderid(order_id)
+                if order:
+                    cursor_object = connection.cursor()
+                    cursor_object.execute(query,(data['newstatus'],order_id,))
+                    connection.commit()
+                    return{"message":"parcel status changed to {}".format(data['newstatus'])}
+                return{"error":"order not found"},404
+            return {"error":"you are not an admin"}, 402
+        return{"error":"user not found"}, 404
 
-class DeclineParcel(Resource):
-    """Admin class for declining parcel order."""
-
-    def put(self, id):
-        """Put method to change parcel status to declined."""
-        order = Order().get_by_id(id)
-
-        if order:
-
-            if order.status != "pending":
-                return {"message": "order already {}".format(order.status)}
-
-            order.status = "declined"
-            return {"message": "Order declined"}
-
-        return {"message": "Order not found"}, 404
-
-
-class DeliveredParcels(Resource):
-    """Return a list of parcel orders completed by admin."""
-
-    def get(self):
-        """Get method to fetch all deliverd parcels."""
-        return {"completed orders": [order.serialize() for order in orders if
-                order.status == "completed"]}, 200
-
-
-class PendingParcels(Resource):
-    """Return all pending parcels."""
-
-    def get(self):
-        """Get method fethes all pending parcels."""
-        return {"Pending parcels": [order.serialize() for order in orders if
-                order.status == ("pending" or "Pending")]}, 200
-
-
-class MovingParcels(Resource):
-    """Class to handle orders in transit(moving)."""
-
-    def get(self):
-        """Return all moving orders."""
-        return {"moving parcels": [order.serialize() for order in orders if
-                order.status == "In Transit"]}
-
-
-class MarkParcelInTransit(Resource):
-    """Admin class for marking parcel status to moving."""
-
-    def put(self, id):
-        """Put method change status to moving."""
-        order = Order().get_by_id(id)
-
-        if order:
-            if order.status == ("completed" or "declined"):
-                return {"You already marked the order as {}"
-                        .format(order.status)}, 200
-
-            if order.status == "pending":
-                return {"message": "order should be approved first"}, 200
-
-            if order.status == "approved":
-                order.status = "moving"
-                return {"message": "Parcel {}"
-                        .format(id) + " now on road"}, 200
-
-        return {"message": "order not found"}, 404
-
-
-class ApproveParcel(Resource):
-    """Admin class for approving parcel."""
-
-    def put(self, id):
-        """Put method change parcel status to approved."""
-        order = Order().get_by_id(id)
-
-        if order:
-            if order.status != "pending":
-                return {"message": "order already {}"
-                        .format(order.status)}, 200
-            order.status = "approved"
-            return {"message": "your order has been approved"}, 200
-
-        return {"message": "order not found"}, 404
-
-
-class DeliverParcel(Resource):
-    """Admin class for changing parcel status to delivered."""
-
-    def put(self, id):
-        """Put method change status to delivered."""
-        order = Order().get_by_id(id)
-
-        if order:
-            if order.status == ("delivered" or "declined"):
-                return {"message": "parcel already {}".format(order.status)}
-
-            if order.status == "pending":
-                return {"message": "please approve the order first "}
-
-            if order.status == "moving":
-                order.status = "delivered"
-                return {
-                    "message":
-                    "parcel {}".format(id) + " delivered successfully"
-                }
-
-        return {"message": "Order not found"}, 404
-
-
-class GetAcceptedParcels(Resource):
-    """Get the Orders accepted by admin."""
-
-    def get(self):
-        """Return list of approved orders."""
-        return {
-            "approved_orders": [
-                order.serialize() for order in orders
-                if order.status == "approved"
-            ]
-        }, 200
