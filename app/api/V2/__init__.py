@@ -7,7 +7,7 @@ from .views.parcelviews import PendingParcels, DeliveredParcels
 from .views.parcelviews import MovingParcels, SpecificParcel, DeliverParcel
 from .views.parcelviews import DeclinedParcels, MarkParcelInTransit
 from .views.parcelviews import ApproveParcel, GetAcceptedParcels, DeclineParcel
-from .views.parcelviews import UserRegistration
+from .views.userviews import UserRegistration
 
 version_2 = Blueprint('v2', __name__)
 
