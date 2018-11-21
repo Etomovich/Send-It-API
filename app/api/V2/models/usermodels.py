@@ -1,4 +1,4 @@
-"""COntain User model."""
+"""Contain User model."""
 import psycopg2
 from flask import app
 from app.db_config import init_db
@@ -27,12 +27,12 @@ class User:
         )
 
     @classmethod
-    def get_by_username(cls, username):
+    def get_user_by_username(cls, username):
         """Find a user by username."""
-        cur = connection.cursor()
+        curobject = connection.cursor()
         query = """SELECT * FROM users WHERE username= %s"""
-        cur.execute(query, (username,))
-        row = cur.fetchone()
+        curobject.execute(query, (username,))
+        row = curobject.fetchone()
         if row:
             user = cls(*row)
         else:
@@ -40,18 +40,15 @@ class User:
         return user
 
     @classmethod
-    def get_by_id(cls, _id):
+    def get__user_by_id(cls, _id):
         """Find a user by id."""
-        cur = connection.cursor()
+        cursorobject = connection.cursor()
         query = "SELECT * FROM users WHERE userid= %s"
-        cur.execute(query, (_id,))
-        row = cur.fetchone()
+        curobject.execute(query, (_id,))
+        row = curobject.fetchone()
         if row:
             user = cls(*row)
         else:
             user = None
 
         return user
-
-
-   
