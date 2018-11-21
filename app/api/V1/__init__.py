@@ -7,7 +7,7 @@ from .views.parcelviews import PendingParcels, DeliveredParcels
 from .views.parcelviews import MovingParcels, SpecificParcel, DeliverParcel
 from .views.parcelviews import DeclinedParcels, MarkParcelInTransit
 from .views.parcelviews import ApproveParcel, GetAcceptedParcels, DeclineParcel
-from .views.parcelviews import UserRegistration
+
 
 version_1 = Blueprint('v1', __name__)
 
@@ -29,4 +29,3 @@ api.add_resource(MarkParcelInTransit, '/parcels/<int:id>/moving')
 api.add_resource(DeclineParcel, '/parcels/<int:id>/declined')
 api.add_resource(CancelSpecificParcel, '/parcels/<int:id>/cancel')
 api.add_resource(GetUserParcels, '/users/<int:user_id>/parcels')
-api.add_resource(UserRegistration, '/auth/signup')
