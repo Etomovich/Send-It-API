@@ -6,6 +6,10 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install coveralls
+
+before_script:
+  - psql -c "CREATE DATABASE data;" -U postgres
+  - psql -c "CREATE USER brian WITH PASSWORD 'brian';" -U postgres
   
 script:
   - nosetests --with-coverage --cover-package=app
