@@ -23,13 +23,14 @@ class UserRegistration(Resource):
 
         user = User().get_user_by_username(data['username'])
         if not user:
-            curobject = connection.cursor() 
-            curobject.execute(query, (data['username'], data['email'],data['password'],data['phone'],data['role']))
+            cursor_object = connection.cursor() 
+            cursor_object.execute(query, (data['username'], data['email'],data['password'],data['phone'],data['role']))
             connection.commit()
             user = User().get_user_by_username(data['username'])
-            access_token = create_access_token(identity=user.id, fresh=True)
-            refresh_token = create_refresh_token(user.id)
-            return {"access token":access_token}, 201
+            access_token = create_access_token(identity=user.user_id, fresh=True)
+            refresh_token = create_refresh_token(user.user_id)
+            # return {"access token":access_token}, 201
+            return {"user info":user.serialize_user()}
         
             return {"error":"error connecting to the database"}, 404
         
@@ -50,8 +51,8 @@ class UserLogin(Resource):
         user = User().get_user_by_username(username)
         if user:
             if password == user.password:
-                access_token = create_access_token(identity=user.id, fresh=True)
-                refresh_roken = create_refresh_token(user.id)
+                access_token = create_access_token(identity=user.user_id, fresh=True)
+                refresh_roken = create_refresh_token(user.user_id)
                 return {"access token":access_token}, 200
 
             return {"message":"invalid password, try again"}, 
@@ -59,9 +60,28 @@ class UserLogin(Resource):
         return{"message":"user not found please register"}, 404
 
 class TokenRefresh(Resource):
+    """Refresh user access token."""
     def post(self):
-        # retrive the user's identity from the refresh token using a Flask-JWT-Extended built-in method
+        """Retrive the user's identity from the refresh token using a Flask-JWT-Extended built-in method."""
         user = get_jwt_identity()
-        # return a non-fresh token for the user
+        """Return a non-fresh token for the user."""
         new_token = create_access_token(identity=user, fresh=False)
         return {'refreshed token': new_token}, 200
+
+class GetAllUsers(Resource):
+    """Get all registered users."""
+    def get(self):
+        """Get method fetch all users."""
+        current_users = []
+        cur = connection.cursor()
+        query = "SELECT * FROM users"
+        cur.execute(query)
+        rows = cur.fetchall()
+        if len(rows)==0:
+            return{"message":"no user found"}, 404
+        for row in rows:
+            user = User(*row)
+            current_users.append(user)
+
+        return {"all users":[user.serialize_user() for user in current_users]}, 200
+
