@@ -1,6 +1,6 @@
 """Contain parcels view classes and methods."""
 from flask_restful import Resource, reqparse
-from ..models.parcelmodels import Order, orders, destinations
+from ..models.parcelmodels import Order
 from ..models.usermodels import User, connection
 from ..utils import valid_destination_name, valid_origin_name
 from flask_jwt_extended import (create_refresh_token,jwt_refresh_token_required,jwt_required)
@@ -21,31 +21,38 @@ class CreateParcel(Resource):
        
         query = "INSERT INTO orders (destination, origin, price, weight, user_id) VALUES (%s,%s,%s,%s,%s)"
         
-        curobject = connection.cursor()
-        curobject.execute(query, (data['destination'],data['origin'],data['weight']*20,data['weight'],current_userid))
+        cursor_object = connection.cursor()
+        cursor_object.execute(query, (data['destination'],data['origin'],data['weight']*20,data['weight'],current_userid))
         connection.commit()
-        return {"message":"parcel craeted, waiting approval"}, 201
-
-
-class GetParcels(Resource):
-    """Class for get parcel method."""
-
-    def get(self):
-        """Get method to return all orders."""
-        return {"orders": [order.serialize() for order in orders]}
+        return {"message":"parcel created, waiting approval"}, 201
 
 
 class GetUserParcels(Resource):
     """Class to get parcels by a specific user."""
 
     def get(self, user_id):
-        """Get method to fetch parcels by user id."""
-        return {
-            "Parcel orders for user {}".format(user_id): [
-                order.serialize() for order in orders
-                if order.u_id == user_id
-            ]
-        }, 200
+        """Get all parcel by a unique user ID."""
+        current_user_orders=[]
+        cursor_object = connection.cursor()
+        query = """SELECT * FROM orders WHERE user_id= %s"""
+        cursor_object.execute(query, (user_id,))
+        rows = cursor_object.fetchall()
+        if len(rows)==0:
+            return{"error":"user {} has no parces".format(user_id)}, 404
+        for row in rows:
+            order = Order(*row)
+            current_user_orders.append(order)
+            return{"user {} orders".format(user_id):[order.serialize_order() for order in current_user_oders]}, 200
+class GetParcels(Resource):
+    """Class for get parcel method."""
+
+    def get(self):
+        """Get method to return all orders."""
+        return {"orders": [order.serialize() for order in current_user_orders]}
+
+
+
+    
 
 
 class CancelSpecificParcel(Resource):
