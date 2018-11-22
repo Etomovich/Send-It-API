@@ -4,6 +4,7 @@ from flask import app
 from app.db_config import init_db
 
 connection = init_db()
+cursor_object = connection.cursor()
 
 class Order:
     """Contain parcel and user fuctions."""
@@ -48,4 +49,41 @@ class Order:
             order = None
         return order
 
-    
+    def insert_to_db(self, order_data):
+        query = "INSERT INTO orders (destination, origin, price, weight, user_id) VALUES (%s,%s,%s,%s)"
+        cursor_object.execute(query, (order_data[0],order_data[1],order_data[2],order_data[3]))
+        connection.commit()
+
+    def get_user_parcels(self,user_id):
+        current_user_parcels = []
+        query = """SELECT * FROM orders WHERE user_id= %s"""
+        cursor_object.execute(query, (user_id,))
+        rows = cursor_object.fetchall()
+        for row in rows:
+            order = Order(*row)
+            current_orders.append(order)
+        return current_user_parcels
+
+    def get_all_parcels(self):
+        allparcels = []
+        query = """SELECT * FROM orders """
+        cursor_object.execute(query)
+        rows = cursor_object.fetchall()
+        for row in rows:
+            order = Order(*row)
+            allparcels.append(order)
+        return allparcels
+
+    def change_parcel_detination(self,destination):
+        query = "UPDATE orders SET destination = %s WHERE order_id = %s"
+        cursor_object.execute(query,(data['destination'],order_id,))
+        connection.commit()
+        
+    def change_parcel_status(self,status):
+        query = "UPDATE orders SET destination = %s WHERE order_id = %s"
+        cursor_object.execute(query,(data['newstatus'],order_id,))
+        connection.commit()
+
+            
+
+        

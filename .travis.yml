@@ -9,6 +9,8 @@ install:
 before_script:
   - psql -c "CREATE DATABASE data;" -U postgres
   - psql -c "CREATE USER brian WITH PASSWORD 'brian';" -U postgres
+  - export DATABASE_DEVELOP="host='localhost' port='5432' dbname='data' user='brian' password='brian'"
+  - export DATABASE_TEST="host='localhost' port='5432' dbname='testdb' user='brian' password='brian'"
 script:
   - nosetests --with-coverage --cover-package=app
 
