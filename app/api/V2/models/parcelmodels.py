@@ -47,5 +47,3 @@ class Order:
         else:
             order = None
         return order
-
-    
