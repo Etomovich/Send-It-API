@@ -19,7 +19,13 @@ def valid_person_name(customer_name):
     return re.match(regex, customer_name) 
 
 
-def validate_input(input):
+def valid_input(input):
     '''validate input'''
     regex = "^[a-zA-Z0-9_]{1,20}$"
-    return re.match(regex,input)   
+    return re.match(regex,input) 
+
+def valid_email(input):
+    """Validate user email."""
+    regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+[A-Z]{2,}$"
+    return re.match(regex, input)
+

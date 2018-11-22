@@ -3,7 +3,7 @@ import os
 
 
 class Config(object):
-    """docstring for Config."""
+    """Config."""
 
     DEBUG = False
     CSRF_ENABLED = True
@@ -11,7 +11,7 @@ class Config(object):
 
 
 class DevelopmentConfig(Config):
-    """docstring for DevelopmentConfig."""
+    """DevelopmentConfig."""
 
     DEBUG = True
     TESTING = True
@@ -19,7 +19,7 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
-    """docstring for TestingConfig."""
+    """TestingConfig."""
 
     DEBUG = True
     TESTING = True
@@ -27,13 +27,13 @@ class TestingConfig(Config):
 
 
 class StagingConfig(Config):
-    """docstring for StagingConfig."""
+    """StagingConfig."""
 
     DEBUG = True
 
 
 class ProductionConfig(Config):
-    """docstring for ProductionConfig."""
+    """ProductionConfig."""
 
     DEBUG = False
     TESTING = False

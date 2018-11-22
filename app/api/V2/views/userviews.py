@@ -3,7 +3,9 @@ from flask_restful import Resource, reqparse
 from ..models.usermodels import  connection, User
 from flask_jwt_extended import (create_access_token, get_jwt_identity)
 from flask_jwt_extended import (create_refresh_token,jwt_refresh_token_required,jwt_required)
+from ..utils import valid_destination_name, valid_email, valid_person_name
 
+blacklist = set()
 
 class UserRegistration(Resource):
     """Class creates user registration method."""
@@ -17,18 +19,18 @@ class UserRegistration(Resource):
         parser.add_argument('phone', help='invalid name, check again', required= True)
 
         data = parser.parse_args()
-
-        query = """INSERT INTO users (username, email, password, phone) VALUES (%s,%s,%s,%s)"""
-
+        userdata = (data['username'], data['email'],data['password'],data['phone'],)
         user = User().get_user_by_username(data['username'])
         if not user:
-            cursor_object = connection.cursor() 
-            cursor_object.execute(query, (data['username'], data['email'],data['password'],data['phone'],))
-            connection.commit()
+            
+            if not valid_person_name(data['username']):
+                return {'message': "username is invalid"}, 400
+            User().insert_into_db(userdata)
             user = User().get_user_by_username(data['username'])
             access_token = create_access_token(identity=user.user_id, fresh=True)
             refresh_token = create_refresh_token(user.user_id)
             return {"access token":access_token}, 200
+           
         
         return{"error":"username {} is already taken".format(data['username'])}, 404
 
@@ -55,8 +57,21 @@ class UserLogin(Resource):
 
         return{"message":"user not found please register"}, 404
 
+class LogOut(Resource):
+    """Class got logout endpoint."""
+    
+    @jwt_required
+    def post(self):
+        """Post method create revoke token."""
+        jti = get_raw_jwt()['jti']
+        blacklist.add(jti)
+        return {"message":"log out sucessfully"}
+
+
+
 class TokenRefresh(Resource):
     """Refresh user access token."""
+
     def post(self):
         """Retrive the user's identity from the refresh token using a Flask-JWT-Extended built-in method."""
         user = get_jwt_identity()
@@ -66,25 +81,19 @@ class TokenRefresh(Resource):
 
 class GetAllUsers(Resource):
     """Get all registered users."""
+
+    @jwt_required
     def get(self):
         """Get method fetch all users."""
-        current_users = []
-        cur = connection.cursor()
-        query = "SELECT * FROM users"
-        cur.execute(query)
-        rows = cur.fetchall()
-        if len(rows)==0:
-            return{"message":"no user found"}, 404
-        for row in rows:
-            user = User(*row)
-            current_users.append(user)
-
+        current_users = User().get_all_users()
         return {"all users":[user.serialize_user() for user in current_users]}, 200
 
 class GetSpecificUser(Resource):
     """Get a specific user by user_id."""
+
+    @jwt_required
     def get(self, user_id):
         """Get method return specific user."""
         user = User().get_user_by_userid(user_id)
         if user:
-            return{"message":"user {} details:"user.serialize_user()}
+            return{"message":"user details:"[user.serialize_user()]}

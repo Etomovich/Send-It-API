@@ -1,8 +1,10 @@
 """Contain db connection fuctions."""
 import psycopg2
+import os
+from config import app_config
 
-url = "dbname=data host=localhost user=brian password= brian"
-
+env = os.getenv("FLASK_ENV")
+url = app_config[env].DATABASE_URL
 
 def connection(url):
     """Connection initiated."""
@@ -17,10 +19,10 @@ def init_db():
 
 def create_super_admin():
     """Fuction create a super admin."""
-    query = "INSERT INTO users (role, username, email, phone, password) VALUES(%s,%s,%s,%s,%s)"
+    query = "INSERT INTO users (role, username, email, phone, password) VALUES(%s,%s,%s,%d,%s)"
     conn = init_db()
     cur = conn.cursor()
-    cur.execute(query,('admin','brian','brian@brian.com',070027,'andela'))
+    cur.execute(query,('admin','brian','brian@brian.com',21454,'andela'))
 
 def create_orders_table():
     """Create orders table."""

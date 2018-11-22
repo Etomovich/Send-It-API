@@ -9,7 +9,7 @@ class TestAllOrders(unittest.TestCase):
 
     def setUp(self):
         """Setup method to define data."""
-        self.app = create_app()
+        self.app = create_app('testing')
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()

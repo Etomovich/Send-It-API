@@ -3,7 +3,10 @@ import psycopg2
 from flask import app
 from app.db_config import init_db
 
+
 connection = init_db()
+cursor_object = connection.cursor()
+
 class User:
     """Class for user object."""
 
@@ -53,3 +56,27 @@ class User:
             user = None
 
         return user
+    
+    @classmethod
+    def insert_into_db(self, userdata):
+        """Method to insert user to database."""
+        query = """INSERT INTO users (username, email, password, phone) VALUES (%s,%s,%s,%s)""" 
+        cursor_object.execute(query, (userdata[0],userdata[1],userdata[2],userdata[3]) )
+        connection.commit()
+        
+
+    def get_all_users(self):
+        current_users = []
+        cur = connection.cursor()
+        query = "SELECT * FROM users"
+        cur.execute(query)
+        rows = cur.fetchall()
+        if len(rows)==0:
+            return{"message":"no user found"}, 404
+        for row in rows:
+            user = User(*row)
+            current_users.append(user)
+        return current_users
+
+
+        
