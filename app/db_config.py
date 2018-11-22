@@ -56,4 +56,3 @@ def create_users_table():
     cur.execute(query)
     conn.commit()
     conn.close()
-

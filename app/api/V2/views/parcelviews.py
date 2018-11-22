@@ -116,4 +116,3 @@ class ChangeParcelStatus(Resource):
                 return{"error":"order not found"},404
             return {"error":"you are not an admin"}, 402
         return{"error":"user not found"}, 404
-

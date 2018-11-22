@@ -1,21 +1,48 @@
-class Config:
-    pass
+"""Docsstring for config.py."""
+import os
+
+
+class Config(object):
+    """docstring for Config."""
+
+    DEBUG = False
+    CSRF_ENABLED = True
+    JWT_SECRET_KEY = "brian"
+
 
 class DevelopmentConfig(Config):
-    DEBUG=True
-    TESTING=False
+    """docstring for DevelopmentConfig."""
+
+    DEBUG = True
+    TESTING = True
+    DATABASE_URL = os.getenv('DATABASE_DEVELOP')
+
 
 class TestingConfig(Config):
-    DEBUG=True
-    TESTING=True
+    """docstring for TestingConfig."""
+
+    DEBUG = True
+    TESTING = True
+    DATABASE_URL = os.getenv('DATABASE_TEST')
+
+
+class StagingConfig(Config):
+    """docstring for StagingConfig."""
+
+    DEBUG = True
+
 
 class ProductionConfig(Config):
-    pass
+    """docstring for ProductionConfig."""
+
+    DEBUG = False
+    TESTING = False
+    DATABASE_URL = os.getenv('DATABASE_PRODUCTION')
 
 
-app_config={
-    "development":DevelopmentConfig,
-    "testing":TestingConfig,
-    "production":ProductionConfig,
-    "default":DevelopmentConfig
+app_config = {
+    "development": DevelopmentConfig,
+    "testing": TestingConfig,
+    "default": DevelopmentConfig,
+    "production": ProductionConfig
 }

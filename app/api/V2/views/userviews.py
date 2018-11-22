@@ -81,3 +81,10 @@ class GetAllUsers(Resource):
 
         return {"all users":[user.serialize_user() for user in current_users]}, 200
 
+class GetSpecificUser(Resource):
+    """Get a specific user by user_id."""
+    def get(self, user_id):
+        """Get method return specific user."""
+        user = User().get_user_by_userid(user_id)
+        if user:
+            return{"message":"user {} details:"user.serialize_user()}
