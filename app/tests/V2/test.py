@@ -54,18 +54,18 @@ class BaseCase(unittest.TestCase):
             '/api/v2/auth/login', data=json.dumps(self.login_data),
             content_type='application/json')
         data = json.loads(res.get_data(as_text=True))
-        self.token = data[0]
+        self.token = data['access']
         self.user_headers = {
-            'Authorization': f'Bearer {self.token}'}
+            'Authorization':'Bearer' {}.format(self.token)}
         
         self.client.post()
         res = self.client.post(
             '/api/v2/auth/login', data=json.dumps(self.login_admin),
             content_type='application/json')
         data = json.loads(res.get_data(as_text=True))
-        self.token = data[0]
+        self.token = data['access']
         self.admin_headers = {
-            'AUTHORIZATION': f'Bearer {self.token}'
+            'AUTHORIZATION': 'Bearer' {}.format(self.token)
         }
 
     def tearDown(self):
@@ -93,7 +93,7 @@ class UserViewsCase(BaseCase):
             '/api/v2/auth/signup', data=json.dumps(self.signup_data),
             content_type='application/json')
         result = json.loads(res2.data)
-        self.assertEqual(result["message"], "user already exists")
+        self.assertEqual(result['message'], "user already exists")
         self.assertEqual(res2.status_code, 409)
 
     def test_user_login(self):
