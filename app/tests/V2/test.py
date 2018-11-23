@@ -54,7 +54,7 @@ class BaseCase(unittest.TestCase):
             '/api/v2/auth/login', data=json.dumps(self.login_data),
             content_type='application/json')
         data = json.loads(res.get_data(as_text=True))
-        self.token = data[2]
+        self.token = data[1]
         self.user_headers = {
             'Authorization':'Bearer {}'.format(self.token)}
         
