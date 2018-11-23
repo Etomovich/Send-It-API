@@ -65,7 +65,7 @@ class BaseCase(unittest.TestCase):
         data = json.loads(res.get_data(as_text=True))
         self.token = data.get('access_token')
         self.user_headers = {
-            'AUTHORIZATION': 'Bearer ' + self.token
+            'AUTHORIZATION': 'Bearer {}'.format(self.token)
         }
         self.client.post(
             '/api/v2/auth/signup', data=json.dumps(self.signup_admin),
@@ -209,7 +209,7 @@ class BaseCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.client.put(
             '/api/v2/parcels/1/cancel', headers=req_header, content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -227,7 +227,7 @@ class BaseCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.client.put(
             '/api/v2/parcels/1/presentLocation', headers=req_header, data=json.dumps(self.edit_data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -245,7 +245,7 @@ class BaseCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.client.put(
             '/api/v2/parcels/1/status', headers=req_header, data=json.dumps(self.edit_data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -263,7 +263,7 @@ class BaseCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.client.put(
             '/api/v2/parcels/1/destination', headers=req_header, data=json.dumps(self.edit_data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
