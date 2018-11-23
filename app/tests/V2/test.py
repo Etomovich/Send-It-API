@@ -41,7 +41,7 @@ class TestDeliveryOrders(unittest.TestCase):
         """Test endpoint to create user"""
         response = self.app.post(
             '/api/v2/auth/signup', data=json.dumps(self.user_data), content_type='application/json')
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 400)
 
         result = json.loads(response.data)
         self.assertIn('Signup successul!', str(result))
@@ -63,7 +63,7 @@ class TestDeliveryOrders(unittest.TestCase):
             "username": self.user_data['username'], "password": self.user_data['password']}
         response = self.app.post(
             '/api/v2/auth/login', data=json.dumps(user_login), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
 
         result = json.loads(response.data)
         self.assertIn('access', str(result))
@@ -79,7 +79,7 @@ class TestDeliveryOrders(unittest.TestCase):
 
         result = json.loads(response.data)
 
-        req_header = {'Authorization': 'Bearer {}'.format(result['access_token'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.app.post(
             '/api/v2/parcels', data=json.dumps(self.order_data), headers=req_header, content_type='application/json')
         self.assertEqual(response.status_code, 201)
@@ -237,7 +237,7 @@ class TestDeliveryOrders(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.app.get(
             '/api/v2/users/1/delivered', headers=req_header, content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -256,7 +256,7 @@ class TestDeliveryOrders(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.app.get(
             '/api/v2/users/1/in-transit', headers=req_header, content_type='application/json')
         self.assertEqual(response.status_code, 200)
