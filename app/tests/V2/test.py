@@ -80,7 +80,7 @@ class BaseCase(unittest.TestCase):
         }
 
 
-        self.headers = {}:
+        self.headers = {}
 
     def test_create_user(self):
         """Test endpoint to create user"""
