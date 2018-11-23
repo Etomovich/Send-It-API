@@ -1,9 +1,9 @@
 import os
 from app import create_app
-from app.config import  app_config
+from app.config import app_config
 
-app=create_app(production)
-
+config_name = app_config['production']
+app=create_app(config_name)
 
 if __name__ == '__main__':
     app.run(debug=True)

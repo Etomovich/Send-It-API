@@ -2,7 +2,7 @@
 from flask import Flask
 from .api.V1 import version_1
 from .api.V2 import version_2
-from app.db_config import create_orders_table,create_users_table, create_super_admin
+from app.db_config import create_orders_table,create_users_table, create_super_user, create_super_admin
 import os
 from flask_jwt_extended import JWTManager
 
@@ -15,6 +15,7 @@ def create_app(config):
     create_orders_table()
     create_users_table()
     create_super_admin()
+    create_super_user()
     
     app.register_blueprint(version_1)
     app.register_blueprint(version_2)

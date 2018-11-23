@@ -49,10 +49,8 @@ class GetUserParcels(Resource):
             userparcels = Order().get_user_parcels(user_id)
             if len(userparcels) == 0:
                 return{"error":"user {} has no parcels".format(user_id)}, 404
-            return{"user {} orders".format(user_id):[order.serialize_order() for parcel in userparcels]}, 200
+            return{"user {} orders".format(user_id):[parcel.serialize_order() for parcel in userparcels]}, 200
         return{"error":"you are not allowed to view these,you should be admin or the owner"}
-        
-
         
 
 class GetParcels(Resource):
@@ -64,7 +62,7 @@ class GetParcels(Resource):
         allparcels = Order().get_all_parcels()
         if len(allparcels) == 0:
             return{"error":"no parcels found"}
-        return{"All orders":[parcel.serialize_order() for parcel in allparcels]}, 200
+        return{"all orders":[parcel.serialize_order() for parcel in allparcels]}, 200
 
 class ChangeParcelDestination(Resource):
     """class for changing parcel destination."""
@@ -83,6 +81,7 @@ class ChangeParcelDestination(Resource):
                     return{"error":"can't change, this already {}".format(order.status)}, 404
                 Order().change_parcel_destination(data['destination'])
                 return{"success":"destination changed to{}".format(data['destination'])}, 200
+            return{"error":"not allowed, only owners may change parcel destination"}
         return{"error":"order not found"},404
 
 class GetSpecificParcel(Resource):
@@ -110,10 +109,12 @@ class ChangeParcelStatus(Resource):
 
         user = User().get_user_by_id(current_userid)
         if user:
-            if user.role == "amin":
+            if user.role == "admin":
                 order = Order().get_order_by_orderid(order_id)
                 if order:
-                    Order().change_parcel_status(data['new status'])
+                    if order.status ==  "cancelled" or order.status ==  "delivered":
+                        return{"error":"can't {}".format(data['new status'])+" this already {}".format(order.status)}, 400
+                    Order().change_parcel_status(data['new status'], order_id)
                     return{"message":"parcel status changed to {}".format(data['new status'])}
                 return{"error":"order not found"},404
             return {"error":"you are not an admin"}, 403

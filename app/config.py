@@ -15,7 +15,7 @@ class DevelopmentConfig(Config):
 
     DEBUG = True
     TESTING = True
-    url = "host='localhost' port='5432' dbname='data' user='brian'"
+    url = "host='localhost' dbname='data' user='brian' password= 'brian'"
 
 
 class TestingConfig(Config):
@@ -23,7 +23,7 @@ class TestingConfig(Config):
 
     DEBUG = True
     TESTING = True
-    url = "host='localhost' port='5432' dbname='testdb' user='brian'"
+    url = "host='localhost' dbname='testdb' user='brian' password='brian'"
 
 
 class StagingConfig(Config):
@@ -37,7 +37,7 @@ class ProductionConfig(Config):
 
     DEBUG = False
     TESTING = False
-    url = "host='localhost' port='5432' dbname='data' user='brian'"
+    url = "postgres://tuxxcbkoxzmujf:7be0960ab052c84d9896d075b98443e9f4a96eeeca10b73b21c870aa55685ac9@ec2-54-83-8-246.compute-1.amazonaws.com:5432/daeegk5ivabirf"
 
 
 app_config = {

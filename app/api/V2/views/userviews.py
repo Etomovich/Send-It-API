@@ -28,14 +28,12 @@ class UserRegistration(Resource):
             if not valid_person_name(data['username']):
                 return {'message': "your username should contain letters and numbers only"}, 400
             if not valid_email(data['email']):
-                return{"error":"your email is not valid, should be in name@domain.com format"}
+                return{"error":"your email is not valid, should be in name@domain.com format"}, 400
             User().insert_into_db(userdata)
             user = User().get_user_by_username(data['username'])
             access_token = create_access_token(identity=user.user_id, fresh=True)
             refresh_token = create_refresh_token(user.user_id)
-            return {"access token":access_token}, 200
-           
-        
+            return {"access_token":access_token}, 200
         return{"error":"username {} is already taken".format(data['username'])}, 404
 
 class UserLogin(Resource):
@@ -55,11 +53,11 @@ class UserLogin(Resource):
             if sha256_crypt.verify(password, user.password):
                 access_token = create_access_token(identity=user.user_id, fresh=True)
                 refresh_roken = create_refresh_token(user.user_id)
-                return {"access token":access_token}, 200
+                return {"access_token":access_token}, 200
 
-            return {"message":"invalid password, try again"}, 
+            return {"message":"invalid password try again"},400
 
-        return{"message":"user not found please register"}, 404
+        return{"message":"user not found ,please register"},404
 
 class LogOut(Resource):
     """Class got logout endpoint."""
@@ -81,7 +79,7 @@ class TokenRefresh(Resource):
         user = get_jwt_identity()
         """Return a non-fresh token for the user."""
         new_token = create_access_token(identity=user, fresh=False)
-        return {'refreshed token': new_token}, 200
+        return {'refreshed_token': new_token}, 200
 
 class GetAllUsers(Resource):
     """Get all registered users."""

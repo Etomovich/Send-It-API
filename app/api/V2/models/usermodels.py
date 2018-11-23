@@ -33,8 +33,8 @@ class User:
     @classmethod
     def get_user_by_username(cls, username):
         """Find a user by username."""
-        query = """SELECT * FROM users WHERE username= %s"""
-        cursor_object.execute(query, (username,))
+        query_user = """SELECT * FROM users WHERE username= %s"""
+        cursor_object.execute(query_user, (username,))
         row = cursor_object.fetchone()
         if row:
             user = cls(*row)
@@ -45,8 +45,8 @@ class User:
     @classmethod
     def get_user_by_id(cls, _id):
         """Find a user by id."""
-        query = "SELECT * FROM users WHERE userid= %s"
-        cursor_object.execute(query, (_id,))
+        query1 = "SELECT * FROM users WHERE userid= %s"
+        cursor_object.execute(query1, (_id,))
         row = cursor_object.fetchone()
         if row:
             user = cls(*row)
@@ -58,8 +58,8 @@ class User:
     @classmethod
     def insert_into_db(self, userdata):
         """Method to insert user to database."""
-        query = """INSERT INTO users (username, email, password, phone) VALUES (%s,%s,%s,%s)""" 
-        cursor_object.execute(query, (userdata[0],userdata[1],userdata[2],userdata[3]) )
+        query1 = """INSERT INTO users (username, email, password, phone) VALUES (%s,%s,%s,%s)""" 
+        cursor_object.execute(query1, (userdata[0],userdata[1],userdata[2],userdata[3]) )
         connection.commit()
         
 

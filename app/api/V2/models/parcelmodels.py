@@ -62,7 +62,7 @@ class Order:
         rows = cursor_object.fetchall()
         for row in rows:
             order = Order(*row)
-            current_orders.append(order)
+            current_user_parcels.append(order)
         return current_user_parcels
 
     def get_all_parcels(self):
@@ -76,20 +76,15 @@ class Order:
         return allparcels
 
     def change_parcel_destination(self,destination,order_id):
-        query = "UPDATE orders SET destination = %s WHERE order_id = %s"
-        cursor_object.execute(query,(destination,order_id,))
+        query_destination = "UPDATE orders SET destination = %s WHERE order_id = %s"
+        cursor_object.execute(query_destination,(destination,order_id,))
         connection.commit()
         
     def change_parcel_status(self,status,order_id):
-        query = "UPDATE orders SET destination = %s WHERE order_id = %s"
-        cursor_object.execute(query,(status,order_id,))
+        query_status = "UPDATE orders SET status = %s WHERE order_id = %s"
+        cursor_object.execute(query_status,(status,order_id,))
         connection.commit()
 
     def change_parcel_location(self, location, order_id):
         query = "UPDATE orders set curr_location = %s WHERE order_id = %s"
         cursor_object.execute(query,(location, order_id,))
-
-
-            
-
-        

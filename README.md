@@ -66,6 +66,20 @@ $ flask run
 
 	`
 ## How to test the hosted version:
-Heroku app hosted on: sendit123.herokuapp.com/
+Heroku app hosted on: 
+https://sendit123.herokuapp.com/
 place the different endpoints at the end of the above url to test
->>>>>>> 365bb87e8f510d597f66d40541babb145bfcbdb7
+
+i.e To test user signup; place /api/v1/signup at the end of the url:
+https://sendit123.herokuapp.com/api/v1/signup
+
+NB: Test on POSTMAN to allow testing all GET,PUT, DELETE and POST methods.
+Documentation can be found here:
+https://documenter.getpostman.com/view/5800340/RzfdpAdu
+
+The UI for this API is here, to be connected later.
+
+https://brianserem.github.io/SendIT/
+
+
+KEEP CHECKING AND BE COOL!!1
