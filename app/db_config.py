@@ -70,4 +70,14 @@ def create_users_table():
     cur = conn.cursor()
     cur.execute(query)
     conn.commit()
-    
+
+def destroy_tables():
+    """destroy tables method."""
+    conn = init_db()
+    cur = conn.cursor()
+    drop_orders = """DROP TABLE IF EXISTS orders CASCADE"""
+    drop_users = """DROP TABLE IF EXISTS users CASCADE"""
+    queries = [drop_users, drop_orders]
+    for table_to_drop in queries:
+        cur.execute(table_to_drop)
+    conn.commit()
