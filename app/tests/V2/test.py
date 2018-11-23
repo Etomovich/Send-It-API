@@ -16,7 +16,7 @@ class BaseCase(unittest.TestCase):
             "email": "bran@ushcks.com",
             "password": "brian",
             "username": "brian",
-            "phone" : 70027837
+            "phone" : 70027837}
 
         self.signup_data = {
             "email": "bran@ushcks.com",
@@ -25,7 +25,6 @@ class BaseCase(unittest.TestCase):
             "phone" : 70027837
         }
        
-        }
         self.login_data = {
             "username": "quifi",
             "password": "quifi"
