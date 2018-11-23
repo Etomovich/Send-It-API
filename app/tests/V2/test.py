@@ -58,16 +58,14 @@ class BaseCase(unittest.TestCase):
         self.user_headers = {
             'Authorization': f'Bearer {self.token}'}
         
-        self.client.post(
-            '/api/v2/auth/signup', data=json.dumps(self.signup_admin),
-            content_type='application/json')
+        self.client.post()
         res = self.client.post(
             '/api/v2/auth/login', data=json.dumps(self.login_admin),
             content_type='application/json')
         data = json.loads(res.get_data(as_text=True))
         self.token = data["access_token"]
         self.admin_headers = {
-            'AUTHORIZATION': 'Bearer ' + self.token
+            'AUTHORIZATION': f'Bearer {self.token}'
         }
 
     def tearDown(self):
