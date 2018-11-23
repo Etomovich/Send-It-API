@@ -65,7 +65,7 @@ class BaseCase(unittest.TestCase):
         data = json.loads(res.get_data(as_text=True))
         self.token = data['access']
         self.admin_headers = {
-            'AUTHORIZATION': 'Bearer' {}.format(self.token)
+            'AUTHORIZATION': 'Bearer {}'.format(self.token)
         }
 
     def tearDown(self):
