@@ -30,18 +30,18 @@ class BaseCase(unittest.TestCase):
             "password": "brian"
         }
         self.login_admin = {
-            "username": "serem"
+            "username": "serem",
             "password": "andela"
         }
         self.parcel_data = {
             "name":"PS4 console",
-            "origin": "Marlala"
+            "origin": "Marlala",
             "destination": "Kericho",
             "weight": 12
         }
         self.specific_data = {
              "name":"PS4 console",
-            "origin": "Marlala"
+            "origin": "Marlala",
             "destination": "Kericho",
             "weight": 12
         }
