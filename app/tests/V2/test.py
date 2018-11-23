@@ -56,7 +56,7 @@ class BaseCase(unittest.TestCase):
         data = json.loads(res.get_data(as_text=True))
         self.token = data['access']
         self.user_headers = {
-            'Authorization':'Bearer' {}.format(self.token)}
+            'Authorization':'Bearer {}'.format(self.token)}
         
         self.client.post()
         res = self.client.post(
