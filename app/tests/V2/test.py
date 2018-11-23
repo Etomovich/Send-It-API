@@ -67,16 +67,13 @@ class BaseCase(unittest.TestCase):
         self.user_headers = {
             'AUTHORIZATION': 'Bearer {}'.format(self.token)
         }
-        self.client.post(
-            '/api/v2/auth/signup', data=json.dumps(self.signup_admin),
-            content_type='application/json')
         res = self.client.post(
             '/api/v2/auth/login', data=json.dumps(self.login_admin),
             content_type='application/json')
         data = json.loads(res.get_data(as_text=True))
         self.token = data.get('access_token')
         self.admin_headers = {
-            'AUTHORIZATION': 'Bearer ' + self.token
+            'AUTHORIZATION': 'Bearer {}'.format(self.token)
         }
 
 
@@ -173,7 +170,7 @@ class BaseCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.client.get(
             '/api/v2/parcels/1', headers=req_header, content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -191,7 +188,7 @@ class BaseCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.client.get(
             '/api/v2/users/1/parcels', headers=req_header, content_type='application/json')
         self.assertEqual(response.status_code, 200)
