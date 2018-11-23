@@ -90,7 +90,7 @@ class TestDeliveryOrders(unittest.TestCase):
 
         result = json.loads(response.data)
 
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result['access_token'])}
         response = self.app.post(
             '/api/v2/parcels', data=json.dumps(self.order_data), headers=req_header, content_type='application/json')
         self.assertEqual(response.status_code, 201)
