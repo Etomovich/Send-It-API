@@ -4,6 +4,7 @@ import os
 from config import app_config
 from passlib.hash import sha256_crypt
 
+url = "host='localhost' port='5432' dbname='data' user='brian'"
 
 def connection(url):
     """Connection initiated."""
