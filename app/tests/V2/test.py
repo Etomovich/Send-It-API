@@ -92,7 +92,7 @@ class BaseCase(unittest.TestCase):
         """Test endpoint to create user"""
         response = self.client.post(
             '/api/v2/auth/login', data=json.dumps(self.login_admin), content_type='application/json')
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
         self.assertIn('Signup successul!', str(result))
@@ -325,7 +325,7 @@ class BaseCase(unittest.TestCase):
             '/api/v2/auth/signup', data=json.dumps(self.signup_data),
             content_type='application/json')
         result = json.loads(res2.data)
-        self.assertEqual(res2.status_code, 409)
+        self.assertEqual(res2.status_code, 404)
 
     def test_user_login(self):
         """Docstring for test_user_login method."""
@@ -359,7 +359,7 @@ class BaseCase(unittest.TestCase):
             content_type='application/json')
         result = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 400)
 
 
 
