@@ -94,8 +94,6 @@ class BaseCase(unittest.TestCase):
             '/api/v2/auth/login', data=json.dumps(self.login_admin), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
-        result = json.loads(response.data)
-        self.assertIn('Signup successul!', str(result))
 
     def test_signin_user(self):
         """Test endpoint to signin user"""
