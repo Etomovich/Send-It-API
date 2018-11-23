@@ -13,50 +13,37 @@ class BaseCase(unittest.TestCase):
         self.app = create_app('app.config.TestingConfig').test_client()
         self.client = self.app.test_client()
         self.signup_to_create_parcel_order = {
-            "email": "tom@gmail.com",
-            "first_name": "Tom",
-            "last_name": "Tom",
-            "password": "tom",
-            "username": "tom"
-        }
+            "email": "bran@ushcks.com",
+            "password": "brian",
+            "username": "brian"
+            "phone" : 70027837
 
         self.signup_data = {
-            "email": "fionaityang@gmail.com",
-            "first_name": "Fiona",
-            "last_name": "Murie",
-            "password": "quifi",
-            "username": "quifi"
+             "email": "bran@ushcks.com",
+            "password": "brian",
+            "username": "brian"
+            "phone" : 70027837
         }
-        self.signup_admin = {
-            "email": "fionaityang@gmail.com",
-            "first_name": "Mary",
-            "last_name": "Doe",
-            "password": "mary",
-            "username": "mary",
-            "role": "admin"
+       
         }
         self.login_data = {
             "username": "quifi",
             "password": "quifi"
         }
         self.login_admin = {
-            "username": "mary",
-            "password": "mary"
+            "username": "serem"
+            "password": "andela"
         }
         self.parcel_data = {
-            "item_shipped": "Books",
-            "origin": "Nairobi",
-            "destination": "Kisumu",
-            "current_location": "Nairobi",
-            "pickup_location": "Kisumu",
+            "name":"PS4 console",
+            "origin": "Marlala"
+            "destination": "Kericho",
             "weight": 12
         }
         self.specific_data = {
-            "item_shipped": "Books",
-            "origin": "Nairobi",
-            "destination": "Kisumu",
-            "current_location": "Nairobi",
-            "pickup_location": "Kisumu",
+             "name":"PS4 console",
+            "origin": "Marlala"
+            "destination": "Kericho",
             "weight": 12
         }
 
@@ -67,10 +54,7 @@ class BaseCase(unittest.TestCase):
             "password": "Ac67789"
         }
 
-        self.admin_data = {
-            "username": "serem",
-            "password": "andela"
-        }
+        
 
         self.order_data = {
             "pick up location": "maralal",
