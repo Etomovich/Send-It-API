@@ -9,7 +9,7 @@ cursor_object = connection.cursor()
 class Order:
     """Contain parcel and user fuctions."""
 
-    def __init__(self, order_id=None, destination=None, origin=None,
+    def __init__(self, order_id=None, name=None, destination=None, origin=None,
                  price=None,  weight=None, status=None, user_id=None, 
                  curr_location=None):
         """Initialize the Order class with the required arguments."""
@@ -21,12 +21,14 @@ class Order:
         self.status = status
         self.curr_location = curr_location
         self.user_id=user_id
+        self.name = name
         
 
     def serialize_order(self):
         """Return tuple as dictionary."""
         return dict(
             id=self.order_id,
+            description = self.name,
             origin=self.origin,
             price=self.price,
             destination=self.destination,
@@ -39,7 +41,6 @@ class Order:
     @classmethod
     def get_order_by_orderid(cls, order_id):
         """Find an order by order_id."""
-        cursor_object = connection.cursor()
         query = """SELECT * FROM orders WHERE order_id= %s"""
         cursor_object.execute(query, (order_id,))
         row = cursor_object.fetchone()
@@ -50,8 +51,8 @@ class Order:
         return order
 
     def insert_to_db(self, order_data):
-        query = "INSERT INTO orders (destination, origin, price, weight, user_id) VALUES (%s,%s,%s,%s)"
-        cursor_object.execute(query, (order_data[0],order_data[1],order_data[2],order_data[3]))
+        query = "INSERT INTO orders (name,destination, origin, price, weight, user_id) VALUES (%s,%s,%s,%s,%s,%s)"
+        cursor_object.execute(query, (order_data[0],order_data[1],order_data[2],order_data[3],order_data[4],order_data[5]))
         connection.commit()
 
     def get_user_parcels(self,user_id):
@@ -74,15 +75,20 @@ class Order:
             allparcels.append(order)
         return allparcels
 
-    def change_parcel_detination(self,destination):
+    def change_parcel_destination(self,destination,order_id):
         query = "UPDATE orders SET destination = %s WHERE order_id = %s"
-        cursor_object.execute(query,(data['destination'],order_id,))
+        cursor_object.execute(query,(destination,order_id,))
         connection.commit()
         
-    def change_parcel_status(self,status):
+    def change_parcel_status(self,status,order_id):
         query = "UPDATE orders SET destination = %s WHERE order_id = %s"
-        cursor_object.execute(query,(data['newstatus'],order_id,))
+        cursor_object.execute(query,(status,order_id,))
         connection.commit()
+
+    def change_parcel_location(self, location, order_id):
+        query = "UPDATE orders set curr_location = %s WHERE order_id = %s"
+        cursor_object.execute(query,(location, order_id,))
+
 
             
 

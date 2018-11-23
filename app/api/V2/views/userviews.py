@@ -4,6 +4,7 @@ from ..models.usermodels import  connection, User
 from flask_jwt_extended import (create_access_token, get_jwt_identity)
 from flask_jwt_extended import (create_refresh_token,jwt_refresh_token_required,jwt_required)
 from ..utils import valid_destination_name, valid_email, valid_person_name
+from passlib.hash import sha256_crypt
 
 blacklist = set()
 
@@ -13,18 +14,21 @@ class UserRegistration(Resource):
     def post(self):
         """Get method fetch user data."""
         parser = reqparse.RequestParser()
-        parser.add_argument('username', help='invalid name, check again', required = True)
-        parser.add_argument('email', help='invalid name, check again', required = True)
-        parser.add_argument('password', help='invalid name, check again', required = True)
-        parser.add_argument('phone', help='invalid name, check again', required= True)
+        parser.add_argument('username', help='invalid name, it should be username', required = True)
+        parser.add_argument('email', help='invalid name, it should be email', required = True)
+        parser.add_argument('password', help='invalid name, it should be password', required = True)
+        parser.add_argument('phone', help='invalid input, it should be phone:int',type=int, required= True)
 
         data = parser.parse_args()
-        userdata = (data['username'], data['email'],data['password'],data['phone'],)
+        password = sha256_crypt.encrypt(data['password'])
+        userdata = (data['username'], data['email'],password,data['phone'],)
         user = User().get_user_by_username(data['username'])
         if not user:
             
             if not valid_person_name(data['username']):
-                return {'message': "username is invalid"}, 400
+                return {'message': "your username should contain letters and numbers only"}, 400
+            if not valid_email(data['email']):
+                return{"error":"your email is not valid, should be in name@domain.com format"}
             User().insert_into_db(userdata)
             user = User().get_user_by_username(data['username'])
             access_token = create_access_token(identity=user.user_id, fresh=True)
@@ -48,7 +52,7 @@ class UserLogin(Resource):
 
         user = User().get_user_by_username(username)
         if user:
-            if password == user.password:
+            if sha256_crypt.verify(password, user.password):
                 access_token = create_access_token(identity=user.user_id, fresh=True)
                 refresh_roken = create_refresh_token(user.user_id)
                 return {"access token":access_token}, 200
@@ -94,6 +98,7 @@ class GetSpecificUser(Resource):
     @jwt_required
     def get(self, user_id):
         """Get method return specific user."""
-        user = User().get_user_by_userid(user_id)
+        user = User().get_user_by_id(user_id)
         if user:
-            return{"message":"user details:"[user.serialize_user()]}
+            return{"user details": user.serialize_user()}, 200
+        return{"error":"user {} not found".format(user_id)}, 400

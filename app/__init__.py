@@ -11,9 +11,11 @@ def create_app(config):
     """Crete app fuction."""
     app = Flask(__name__)
     app.secret_key = os.getenv("secret_key") or "brian"
+    
     create_orders_table()
     create_users_table()
     create_super_admin()
+    
     app.register_blueprint(version_1)
     app.register_blueprint(version_2)
     jwt = JWTManager(app)
