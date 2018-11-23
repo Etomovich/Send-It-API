@@ -353,8 +353,8 @@ class BaseCase(unittest.TestCase):
     def test_valid_username_input(self):
         """Docstring for test_valid_username method."""
         self.data = {
-            "email": "beeserem@gmail.com"
-            "password": "brian"
+            "email": "beeserem@gmail.com",
+            "password": "brian",
             "username": "#####"
         }
         res = self.client.post(
