@@ -4,8 +4,6 @@ import os
 from config import app_config
 from passlib.hash import sha256_crypt
 
-env = os.getenv("FLASK_ENV")
-url = app_config[env].DATABASE_URL
 
 def connection(url):
     """Connection initiated."""

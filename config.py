@@ -1,4 +1,4 @@
-"""Docsstring for config.py."""
+"""config.py contains configuration files."""
 import os
 
 
@@ -15,7 +15,7 @@ class DevelopmentConfig(Config):
 
     DEBUG = True
     TESTING = True
-    DATABASE_URL = os.getenv('DATABASE_DEVELOP')
+    DATABASE_URL = "host='localhost' port='5432' dbname='data' user='brian'"
 
 
 class TestingConfig(Config):
@@ -23,7 +23,7 @@ class TestingConfig(Config):
 
     DEBUG = True
     TESTING = True
-    DATABASE_URL = os.getenv('DATABASE_TEST')
+    DATABASE_URL = "host='localhost' port='5432' dbname='testdb' user='brian'"
 
 
 class StagingConfig(Config):
@@ -37,7 +37,7 @@ class ProductionConfig(Config):
 
     DEBUG = False
     TESTING = False
-    DATABASE_URL = os.getenv('DATABASE_PRODUCTION')
+    DATABASE_URL = "host='localhost' port='5432' dbname='data' user='brian'"
 
 
 app_config = {
