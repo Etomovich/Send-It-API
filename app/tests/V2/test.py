@@ -15,11 +15,11 @@ class BaseCase(unittest.TestCase):
         self.signup_to_create_parcel_order = {
             "email": "bran@ushcks.com",
             "password": "brian",
-            "username": "brian"
+            "username": "brian",
             "phone" : 70027837
 
         self.signup_data = {
-             "email": "bran@ushcks.com",
+            "email": "bran@ushcks.com",
             "password": "brian",
             "username": "brian"
             "phone" : 70027837
@@ -92,7 +92,7 @@ class BaseCase(unittest.TestCase):
         }
 
 
-        self.headers = {}
+        self.headers = {}:
 
     def test_create_user(self):
         """Test endpoint to create user"""
@@ -365,17 +365,15 @@ class BaseCase(unittest.TestCase):
     def test_valid_username_input(self):
         """Docstring for test_valid_username method."""
         self.data = {
-            "email": "fionaityang@gmail.com",
-            "first_name": "Fiona",
-            "last_name": "Murie",
-            "password": "quifi",
-            "username": ""
+            "email": "beeserem@gmail.com"
+            "password": "brian"
+            "username": "#####"
         }
         res = self.client.post(
             '/api/v2/auth/signup', data=json.dumps(self.data),
             content_type='application/json')
         result = json.loads(res.data)
-        self.assertEqual(result['message'], "Please enter a valid username")
+        self.assertEqual(result['message'], "your username should contain letters and numbers only")
         self.assertEqual(res.status_code, 400)
 
 
