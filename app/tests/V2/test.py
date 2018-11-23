@@ -3,14 +3,64 @@ import json
 import unittest
 from app import create_app
 
-
-class TestDeliveryOrders(unittest.TestCase):
-    """Class for testing app endpoints"""
+class BaseCase(unittest.TestCase):
+    """docstring for TestCase."""
 
     def setUp(self):
-        """Set up test"""
+        """Docstring for setUp method."""
+        self.app = create_app('testing')
         create_app('app.config.TestingConfig').testing = True
         self.app = create_app('app.config.TestingConfig').test_client()
+        self.client = self.app.test_client()
+        self.signup_to_create_parcel_order = {
+            "email": "tom@gmail.com",
+            "first_name": "Tom",
+            "last_name": "Tom",
+            "password": "tom",
+            "username": "tom"
+        }
+
+        self.signup_data = {
+            "email": "fionaityang@gmail.com",
+            "first_name": "Fiona",
+            "last_name": "Murie",
+            "password": "quifi",
+            "username": "quifi"
+        }
+        self.signup_admin = {
+            "email": "fionaityang@gmail.com",
+            "first_name": "Mary",
+            "last_name": "Doe",
+            "password": "mary",
+            "username": "mary",
+            "role": "admin"
+        }
+        self.login_data = {
+            "username": "quifi",
+            "password": "quifi"
+        }
+        self.login_admin = {
+            "username": "mary",
+            "password": "mary"
+        }
+        self.parcel_data = {
+            "item_shipped": "Books",
+            "origin": "Nairobi",
+            "destination": "Kisumu",
+            "current_location": "Nairobi",
+            "pickup_location": "Kisumu",
+            "weight": 12
+        }
+        self.specific_data = {
+            "item_shipped": "Books",
+            "origin": "Nairobi",
+            "destination": "Kisumu",
+            "current_location": "Nairobi",
+            "pickup_location": "Kisumu",
+            "weight": 12
+        }
+
+        
         self.user_data = {
             "username": "brian",
             "email": "bee@gmail.com",
