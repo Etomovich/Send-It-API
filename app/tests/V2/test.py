@@ -12,25 +12,14 @@ class TestDeliveryOrders(unittest.TestCase):
         create_app('app.config.TestingConfig').testing = True
         self.app = create_app('app.config.TestingConfig').test_client()
         self.user_data = {
-            "username": "tomtom",
-            "first_name": "thomas",
-            "second_name": "wakati",
-            "email": "mnswaleh@gmail.com",
-            "gender": "male",
-            "location": "eldoret",
-            "type": "user",
+            "username": "brian",,
+            "email": "bee@gmail.com",
             "password": "Ac67789"
         }
 
         self.admin_data = {
-            "username": "tito",
-            "first_name": "titaus",
-            "second_name": "mzalendo",
-            "email": "swaleh2031@gmail.com",
-            "gender": "male",
-            "location": "narok",
-            "type": "admin",
-            "password": "Atsf52rty"
+            "username": "serem",
+            "password": "andela"
         }
 
         self.order_data = {
@@ -121,7 +110,7 @@ class TestDeliveryOrders(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         result = json.loads(response.data)
-        req_header = {'Authorization': 'Bearer {}'.format(result['access'])}
+        req_header = {'Authorization': 'Bearer {}'.format(result.get('access_token'))}
         response = self.app.get(
             '/api/v2/parcels', headers=req_header, content_type='application/json')
         self.assertEqual(response.status_code, 200)
