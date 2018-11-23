@@ -49,21 +49,18 @@ $ flask run
 ## Endpoints currently available
 | Method | Endpoint                        | Description                           | User-type         |
 | ------ | ------------------------------- | ------------------------------------- | ------------  |
-|1.POST   | /api/v1/parcels                | Creates a new parcel order.           | customers        |
-|2.GET   | /api/v1/parcels                 | get all parcel orders                    | admin         |
-|3.GET    |/api/v1/parcels/int      | Get a specific parcel order          | customers/admin   |
-| 4.GET    | /api/v1/parcels/approved          | get approved parcel orders            | Admin/customer         |
-| 5.GET    | /api/v1/parcels/approved         | gets all approved parcel orders       |Admin/customer           |
-|6. GET    |/api/v1/parcels/declined         | gets all declined orders              | Admin         |
-| 7.GET    | /api/v1/parcels/moving          | gets all parcel orders currently in transit | Custormer/Admin        |
-|8. GET   | /api/v1/parcels/approved              | gets all pending parcel orders              | Users/Admin   |
-|9. PUT    | /api/v1/parcels/int/delivered   | changes parcel status to delivered           | Admin    |
-|10. PUT    | api/v1/parcels/int/approved          | changes parcel status to approved                | Admin   |
-|11. PUT | /api/v1/parcels/int/declined               | changes parcel status to declined              | Admin   |
-| 12.PUT    | /api/v1/parcels/int/moving     | changes parcel status to moving                    | Admin         |
-| 13.PUT    | /api/v1/parcels/int/cancel     | cancels a parcel order     | custormer         |
-| 14.PUT    | /api/v1/users/int/parcels      | gets all parcels orders for a user               | Admin         |
-| 15.POST    | /api/v1/parcels/int/destination| changes parcel order destination             | custormer    
+|1.POST   | /api/v2/parcels                | Creates a new parcel order.|customers        |
+|2.GET   | /api/v2/parcels                 | Get all parcel orders                    | admin         |
+|3.GET    |/api/v2/parcels/int      | Get a specific parcel order          | customers/admin   |
+|4.PUT| /api/v2/parcels/int/destination|Change a parcel's destination| customers       |
+|5.PUT| /api/v2/users/int/status| gets all parcels orders for a user| Admin         |
+|6.PUT| /api/v2/parcels/int/presentloaction|changes parcel current location|admin  
+|7.GET| /api/v2/parcels/int/|Get a specific parcel|customers/admin   |
+|8.GET| /api/v2/users| gets all registered users for a user| Admin         |
+|9.GET| /api/v2/parcels/int/presentloaction|changes parcel current location|admin 
+|10.POST| /api/v2/auth/signup|Registers a user to the app| customers       |
+|11.POST| /api/v2/auth/login|Logs in a user to the app| Admin         |
+|12.POST| /api/v2/auth|authenticates user for fresh access token|admin   
 
 
 
