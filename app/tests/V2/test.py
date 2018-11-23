@@ -16,19 +16,18 @@ class BaseCase(unittest.TestCase):
             "email": "bran@ushcks.com",
             "password": "brian",
             "username": "brian",
-            "phone" : 70027837
+            "phone" : 70027837}
 
         self.signup_data = {
             "email": "bran@ushcks.com",
             "password": "brian",
-            "username": "brian"
+            "username": "brian",
             "phone" : 70027837
         }
        
-        }
         self.login_data = {
-            "username": "quifi",
-            "password": "quifi"
+            "username": "brian",
+            "password": "brian"
         }
         self.login_admin = {
             "username": "serem"
@@ -56,18 +55,7 @@ class BaseCase(unittest.TestCase):
 
         
 
-        self.order_data = {
-            "pick up location": "maralal",
-            "delivery location": "kericho",
-            "weight": 2,
-            "price": 2000
-        }
-
-        self.edit_data = {
-            "delivery location": "narok",
-            "current location": "kikuyu",
-    
-        }
+        
         self.client.post(
             '/api/v2/auth/signup', data=json.dumps(self.signup_data),
             content_type='application/json')
