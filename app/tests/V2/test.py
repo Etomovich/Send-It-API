@@ -12,7 +12,7 @@ class TestDeliveryOrders(unittest.TestCase):
         create_app('app.config.TestingConfig').testing = True
         self.app = create_app('app.config.TestingConfig').test_client()
         self.user_data = {
-            "username": "brian",,
+            "username": "brian",
             "email": "bee@gmail.com",
             "password": "Ac67789"
         }
@@ -23,8 +23,8 @@ class TestDeliveryOrders(unittest.TestCase):
         }
 
         self.order_data = {
-            "pick up location": "nanyuki",
-            "delivery location": "nairobi",
+            "pick up location": "maralal",
+            "delivery location": "kericho",
             "weight": 2,
             "price": 2000
         }
@@ -32,7 +32,7 @@ class TestDeliveryOrders(unittest.TestCase):
         self.edit_data = {
             "delivery location": "narok",
             "current location": "kikuyu",
-            "status": "in transit"
+    
         }
 
         self.headers = {}
