@@ -2,6 +2,7 @@
 import psycopg2
 import os
 from config import app_config
+from passlib.hash import sha256_crypt
 
 env = os.getenv("FLASK_ENV")
 url = app_config[env].DATABASE_URL
@@ -19,28 +20,42 @@ def init_db():
 
 def create_super_admin():
     """Fuction create a super admin."""
-    query = "INSERT INTO users (role, username, email, phone, password) VALUES(%s,%s,%s,%d,%s)"
+    username = "serem"
+    phone = 700278037
+    password = sha256_crypt.encrypt("andela")
+    query = """SELECT * FROM users WHERE username= %s"""
     conn = init_db()
     cur = conn.cursor()
-    cur.execute(query,('admin','brian','brian@brian.com',21454,'andela'))
+    cur.execute(query, (username,))
+    row = cur.fetchone()
+    if not row:
+        query = "INSERT INTO users (role, username, email, phone, password) VALUES(%s,%s,%s,%s,%s)"
+        conn = init_db()
+        cur = conn.cursor()
+        cur.execute(query,('admin',username,'brian@brian.com',21454585,password))
+        conn.commit()
+    else:
+        conn.close()
+    
+    
 
 def create_orders_table():
     """Create orders table."""
     query = """CREATE TABLE IF NOT EXISTS orders(
     order_id SERIAL PRIMARY KEY,
+    name CHARACTER VARYING(200) NOT NULL,
     destination CHARACTER VARYING(200) NOT NULL,
     origin CHARACTER VARYING(200) NOT NULL,
     price SERIAL  NOT NULL,
     weight SERIAL  NOT NULL,
     status CHARACTER VARYING(200) DEFAULT 'pending',
-    user_id SERIAL  NOT NULL ,
+    user_id SERIAL,
     curr_location CHARACTER VARYING(200) DEFAULT 'sendithq') ; """
-
     conn = init_db()
     cur = conn.cursor()
     cur.execute(query)
     conn.commit()
-    conn.close()
+    
 
 
 def create_users_table():
@@ -52,9 +67,8 @@ def create_users_table():
     email CHARACTER VARYING(200) NOT NULL,
     phone SERIAL,
     password CHARACTER VARYING(200) NOT NULL);"""
-
     conn = init_db()
     cur = conn.cursor()
     cur.execute(query)
     conn.commit()
-    conn.close()
+    
