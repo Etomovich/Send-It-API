@@ -70,8 +70,8 @@ Heroku app hosted on:
 https://sendit123.herokuapp.com/
 place the different endpoints at the end of the above url to test
 
-i.e To test user signup; place /api/v1/signup at the end of the url:
-https://sendit123.herokuapp.com/api/v1/signup
+i.e To test user signup; place /api/v2/signup at the end of the url:
+https://sendit123.herokuapp.com/api/v2/signup
 
 NB: Test on POSTMAN to allow testing all GET,PUT, DELETE and POST methods.
 Documentation can be found here:
@@ -82,4 +82,4 @@ The UI for this API is here, to be connected later.
 https://brianserem.github.io/SendIT/
 
 
-KEEP CHECKING AND BE COOL!!1
+KEEP CHECKING AND BE COOL!!
