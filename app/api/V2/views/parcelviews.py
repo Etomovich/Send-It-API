@@ -20,7 +20,7 @@ class CreateParcel(Resource):
         data = parser.parse_args()
         price = data['weight']*10
 
-        order = (data['name'],data['destination'],data['origin'],price,data['weight'],current_userid)
+        order = Order(name=data['name'],destination=data['destination'],origin=data['origin'],price=price,weight=data['weight'],user_id=current_userid)
         if not valid_destination_name(data['destination']):
             return {'message': "invalid name, it should be destination"}, 400
 
@@ -33,8 +33,12 @@ class CreateParcel(Resource):
         if type(data['weight']) != int:
             return {'message': "Invalid weight, it should be a number"}, 400
 
-        Order().insert_to_db(order)
-        return {"parcel created":"your parcel has been created"}, 201
+        if current_userid:
+            Order().insert_to_db(order)
+            return {"status":"success","message":"your parcel has been created","details":order.serialize_order()}, 201
+        return{"message":"you should first register"}, 400
+
+        
 
 
 class GetUserParcels(Resource):
@@ -48,9 +52,9 @@ class GetUserParcels(Resource):
         if user.role == "admin" or user.user_id == user_id:
             userparcels = Order().get_user_parcels(user_id)
             if len(userparcels) == 0:
-                return{"error":"user {} has no parcels".format(user_id)}, 404
-            return{"user {} orders".format(user_id):[parcel.serialize_order() for parcel in userparcels]}, 200
-        return{"error":"you are not allowed to view these,you should be admin or the owner"}
+                return{"message":"user {} has no parcels".format(user_id)}, 404
+            return{"message":[parcel.serialize_order() for parcel in userparcels],"status":"success"}, 200
+        return{"message":"you are not allowed to view these,you should be admin or the owner"}
         
 
 class GetParcels(Resource):
@@ -61,8 +65,8 @@ class GetParcels(Resource):
         """Get method to return all orders."""
         allparcels = Order().get_all_parcels()
         if len(allparcels) == 0:
-            return{"error":"no parcels found"}
-        return{"all orders":[parcel.serialize_order() for parcel in allparcels]}, 200
+            return{"message":"no parcels found"}
+        return{"status":"success", "message":[parcel.serialize_order() for parcel in allparcels]}, 200
 
 class ChangeParcelDestination(Resource):
     """class for changing parcel destination."""
@@ -78,11 +82,11 @@ class ChangeParcelDestination(Resource):
         if order:
             if order.user_id == user_id:
                 if order.status == "delivered" or order.status == "cancelled":
-                    return{"error":"can't change, this already {}".format(order.status)}, 404
+                    return{"message":"can't change, this already {}".format(order.status)}, 404
                 Order().change_parcel_destination(data['destination'])
-                return{"success":"destination changed to{}".format(data['destination'])}, 200
-            return{"error":"not allowed, only owners may change parcel destination"}
-        return{"error":"order not found"},404
+                return{"message":"destination changed to{}".format(data['destination'])}, 200
+            return{"message":"not allowed, only owners may change parcel destination"}
+        return{"message":"order not found"},404
 
 class GetSpecificParcel(Resource):
     """Class to get a specifi parcel order."""
@@ -92,8 +96,8 @@ class GetSpecificParcel(Resource):
         """Get method fetch a specific parcel."""
         order = Order().get_order_by_orderid(order_id)
         if order:
-            return{"order {} details".format(order_id):order.serialize_order()}
-        return{"error":"order {} not found".format(order_id)}
+            return{"message":order.serialize_order()}
+        return{"message":"order {} not found".format(order_id)}
 
 
 class ChangeParcelStatus(Resource):
@@ -113,12 +117,12 @@ class ChangeParcelStatus(Resource):
                 order = Order().get_order_by_orderid(order_id)
                 if order:
                     if order.status ==  "cancelled" or order.status ==  "delivered":
-                        return{"error":"can't {}".format(data['new status'])+" this already {}".format(order.status)}, 400
+                        return{"message":"can't change to {}".format(data['new status'])+" this already {}".format(order.status)}, 400
                     Order().change_parcel_status(data['new status'], order_id)
                     return{"message":"parcel status changed to {}".format(data['new status'])}
-                return{"error":"order not found"},404
-            return {"error":"you are not an admin"}, 403
-        return{"error":"user not found"}, 404
+                return{"message":"order not found"},404
+            return {"message":"you are not an admin"}, 403
+        return{"message":"user not found"}, 404
 
 class ChangeParcelLocation(Resource):
     """Class for admin, changing parcel location."""
@@ -137,7 +141,7 @@ class ChangeParcelLocation(Resource):
                 order = Order().get_order_by_orderid(order_id)
                 if order:
                     Order().change_parcel_location(newlocation, order_id)
-                    return{"alert":"admin changed location to {}:".format(newlocation)}, 200
-                return{"error":"order not found"},404
-            return {"error":"you are not an admin"}, 403
-        return{"error":"user not found"}, 404
+                    return{"message":"admin changed location to {}:".format(newlocation)}, 200
+                return{"message":"order not found"},404
+            return {"message":"you are not an admin"}, 403
+        return{"message":"user not found"}, 404

@@ -5,7 +5,7 @@ from .views.parcelviews import GetParcels, CreateParcel
 from .views.parcelviews import GetUserParcels,GetSpecificParcel
 from .views.parcelviews import ChangeParcelLocation
 from .views.parcelviews import ChangeParcelDestination, ChangeParcelStatus
-from .views.userviews import UserRegistration, TokenRefresh
+from .views.userviews import UserRegistration, TokenRefresh, UserLogOut
 from .views.userviews import GetAllUsers, UserLogin, GetSpecificUser
 
 version_2 = Blueprint('v2', __name__)
@@ -21,6 +21,7 @@ api.add_resource(UserRegistration, '/auth/signup')
 api.add_resource(UserLogin, '/auth/login')
 api.add_resource(TokenRefresh, '/auth')
 api.add_resource(GetAllUsers, '/users')
+api.add_resource(UserLogOut, '/auth/logout')
 api.add_resource(ChangeParcelDestination, '/parcels/<int:order_id>/destination')
 api.add_resource(ChangeParcelStatus, '/parcels/<int:order_id>/status')
 api.add_resource(ChangeParcelLocation, '/parcels/<int:order_id>/presentlocation')

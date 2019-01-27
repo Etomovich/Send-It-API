@@ -50,9 +50,9 @@ class Order:
             order = None
         return order
 
-    def insert_to_db(self, order_data):
+    def insert_to_db(self, order):
         query = "INSERT INTO orders (name,destination, origin, price, weight, user_id) VALUES (%s,%s,%s,%s,%s,%s)"
-        cursor_object.execute(query, (order_data[0],order_data[1],order_data[2],order_data[3],order_data[4],order_data[5]))
+        cursor_object.execute(query, (order.name,order.destination,order.origin,order.price,order.weight,order.user_id))
         connection.commit()
 
     def get_user_parcels(self,user_id):
@@ -74,6 +74,8 @@ class Order:
             order = Order(*row)
             allparcels.append(order)
         return allparcels
+    def get_delivered_parcels(self):
+        pass
 
     def change_parcel_destination(self,destination,order_id):
         query_destination = "UPDATE orders SET destination = %s WHERE order_id = %s"

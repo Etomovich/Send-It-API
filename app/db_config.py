@@ -56,7 +56,16 @@ def create_super_user():
         conn.close()
 
     
-    
+def create_revokedtoken_table():
+    """Create table for blaclisted token."""
+    query = """CREATE TABLE IF NOT EXISTS revokedtokens(
+    token_id SERIAL PRIMARY KEY,
+    jti CHARACTER VARYING(6000))"""
+    conn = init_db()
+    cur = conn.cursor()
+    cur.execute(query)
+    conn.commit()
+
 
 def create_orders_table():
     """Create orders table."""

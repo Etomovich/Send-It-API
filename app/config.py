@@ -1,11 +1,11 @@
-"""config.py contains configuration files."""
+"""config.py contain configuration files."""
 import os
 
 
 class Config(object):
     """Config."""
 
-    DEBUG = False
+    DEBUG = True
     CSRF_ENABLED = True
     JWT_SECRET_KEY = "brian"
 
@@ -15,7 +15,7 @@ class DevelopmentConfig(Config):
 
     DEBUG = True
     TESTING = True
-    url = "host='localhost' dbname='data' user='brian' password= 'brian'"
+    url = "host='localhost' dbname='data' user='brian' password= 'idfwu8080'"
 
 
 class TestingConfig(Config):
@@ -23,7 +23,7 @@ class TestingConfig(Config):
 
     DEBUG = True
     TESTING = True
-    url = "host='localhost' dbname='testdb' user='brian' password='brian'"
+    url = "host='localhost' dbname='testdb' user='brian' password='idfwu8080'"
 
 
 class StagingConfig(Config):

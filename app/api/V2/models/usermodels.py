@@ -26,8 +26,7 @@ class User:
             username=self.username,
             email=self.email,
             role=self.role,
-            phone=self.phone,
-            password = self.password
+            phone=self.phone
         )
 
     @classmethod
@@ -56,10 +55,10 @@ class User:
         return user
     
     @classmethod
-    def insert_into_db(self, userdata):
+    def insert_into_db(self, user):
         """Method to insert user to database."""
-        query1 = """INSERT INTO users (username, email, password, phone) VALUES (%s,%s,%s,%s)""" 
-        cursor_object.execute(query1, (userdata[0],userdata[1],userdata[2],userdata[3]) )
+        query1 = """INSERT INTO users (username, email, password) VALUES (%s,%s,%s)""" 
+        cursor_object.execute(query1, (user.username,user.email,user.password,) )
         connection.commit()
         
 
@@ -74,6 +73,34 @@ class User:
             user = User(*row)
             current_users.append(user)
         return current_users
+
+class RevokedTokenModel():
+  
+    """Model revoked token."""
+    def __init__(self, token_id=None, jti=None):
+        """Initialize this class."""
+        self.token_id = token_id
+        self.jti = jti
+
+    def add_to_blacklist(self,jti):
+        """Add revoked token to db."""
+        query = """INSERT INTO revokedtokens (jti) values (%s)"""
+        cursor_object.execute(query, (jti,))
+        connection.commit()
+
+    def check_token_if_blacklisted(self,jti):
+        """Check token if in blacklist."""
+        query = """SELECT * FROM revokedtokens WHERE jti = %s"""
+        cursor_object.execute(query, (jti,))
+        row = cursor_object.fetchone()
+        if row:
+            return True
+        else:
+            return False
+
+
+
+
 
 
         
