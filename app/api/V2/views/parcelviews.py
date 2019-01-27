@@ -47,7 +47,7 @@ class GetUserParcels(Resource):
     @jwt_required
     def get(self, user_id):
         """Get all parcel by a unique user ID."""
-        userid = get_jwt_identity()
+        user_id = get_jwt_identity()
         user = User().get_user_by_id(user_id)
         if user.role == "admin" or user.user_id == user_id:
             userparcels = Order().get_user_parcels(user_id)
@@ -68,26 +68,6 @@ class GetParcels(Resource):
             return{"message":"no parcels found"}
         return{"status":"success", "message":[parcel.serialize_order() for parcel in allparcels]}, 200
 
-class ChangeParcelDestination(Resource):
-    """class for changing parcel destination."""
-
-    @jwt_required
-    def put(self, order_id):
-        """Put method changes parcel destination."""
-        parser=reqparse.RequestParser()
-        parser.add_argument("destination",help ="Invalid name check again", required=True)
-        data=parser.parse_args()
-        user_id = get_jwt_identity()
-        order = Order().get_order_by_orderid(order_id)
-        if order:
-            if order.user_id == user_id:
-                if order.status == "delivered" or order.status == "cancelled":
-                    return{"message":"can't change, this already {}".format(order.status)}, 404
-                Order().change_parcel_destination(data['destination'])
-                return{"message":"destination changed to{}".format(data['destination'])}, 200
-            return{"message":"not allowed, only owners may change parcel destination"}
-        return{"message":"order not found"},404
-
 class GetSpecificParcel(Resource):
     """Class to get a specifi parcel order."""
 
@@ -98,6 +78,26 @@ class GetSpecificParcel(Resource):
         if order:
             return{"message":order.serialize_order()}
         return{"message":"order {} not found".format(order_id)}
+
+class GetStatusParcels(Resource):
+    """Class to get all delivered parcels."""
+
+    @jwt_required
+    def post(self):
+        """Get method to return all delivered parcels."""
+        user_id = get_jwt_identity()
+        user = User().get_user_by_id(user_id)
+        parser = reqparse.RequestParser()
+        parser.add_argument('status', help='invalid name,it should be status', required=True)
+        data = parser.parse_args()
+        status = data['status']
+        if user.role == "admin":
+            orders = Order().get_specific_parcels(status)
+            if orders:
+                return{"message":[order.serialize_order() for order in orders]},200
+            return{"message":"no {} parcels found".format(status)},404
+        return{"message":"you should be an admin to view {} parcels".format(status)}
+        
 
 
 class ChangeParcelStatus(Resource):
@@ -145,3 +145,23 @@ class ChangeParcelLocation(Resource):
                 return{"message":"order not found"},404
             return {"message":"you are not an admin"}, 403
         return{"message":"user not found"}, 404
+
+class ChangeParcelDestination(Resource):
+    """class for changing parcel destination."""
+
+    @jwt_required
+    def put(self, order_id):
+        """Put method changes parcel destination."""
+        parser=reqparse.RequestParser()
+        parser.add_argument("destination",help ="Invalid name check again", required=True)
+        data=parser.parse_args()
+        user_id = get_jwt_identity()
+        order = Order().get_order_by_orderid(order_id)
+        if order:
+            if order.user_id == user_id:
+                if order.status == "delivered" or order.status == "cancelled":
+                    return{"message":"can't change, this already {}".format(order.status)}, 404
+                Order().change_parcel_destination(data['destination'])
+                return{"message":"destination changed to{}".format(data['destination'])}, 200
+            return{"message":"not allowed, only owners may change parcel destination"}
+        return{"message":"order not found"},404

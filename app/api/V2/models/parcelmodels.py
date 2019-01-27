@@ -74,8 +74,18 @@ class Order:
             order = Order(*row)
             allparcels.append(order)
         return allparcels
-    def get_delivered_parcels(self):
-        pass
+    
+    def get_specific_parcels(self,status):
+        specific_parcels = []
+        query = """SELECT * FROM orders WHERE status = %s"""
+        cursor_object.execute(query, (status,))
+        rows = cursor_object.fetchall()
+        for row in rows:
+            order = Order(*row)
+            specific_parcels.append(order)
+        return specific_parcels
+
+
 
     def change_parcel_destination(self,destination,order_id):
         query_destination = "UPDATE orders SET destination = %s WHERE order_id = %s"
