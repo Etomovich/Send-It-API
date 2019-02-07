@@ -32,7 +32,7 @@ class UserRegistration(Resource):
             if user:
                 access_token = create_access_token(identity=user.user_id, fresh=True)
                 refresh_token = create_refresh_token(user.user_id)
-                return {"access_token":access_token, "status":"success","user_id":user.user_id}, 200
+                return {"access_token":access_token, "status":"success","user_id":user.user_id,"email":user.email,"role":user.role}, 200
             return{"message":"unable to sign you up at this time","smessage":"error adding user to the datatabse"},400
         return{"message":"username {} is already taken".format(data['username'])}, 404
 
@@ -53,7 +53,7 @@ class UserLogin(Resource):
             if sha256_crypt.verify(password, user.password):
                 access_token = create_access_token(identity=user.user_id, fresh=True)
                 refresh_roken = create_refresh_token(user.user_id)
-                return {"access_token":access_token,"status":"success","user_id":user.user_id}, 200
+                return {"access_token":access_token,"status":"success","user_id":user.user_id,"role":user.role,"email":user.email}, 200
 
             return {"message":"invalid password try again"},400
 

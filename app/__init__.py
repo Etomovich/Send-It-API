@@ -21,7 +21,7 @@ def create_app(config):
     app.config['JWT_SECRET_KEY'] = 'super-secret' 
     app.config['JWT_BLACKLIST_ENABLED'] = True
     app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=6) 
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=600) 
 
 
 
@@ -35,23 +35,14 @@ def create_app(config):
     create_super_admin()
     create_super_user()
     create_revokedtoken_table()
-
-    # @app.after_request
-    # def after_request(response):
-    #     response.headers.add('Access-Control-Allow-Origin', '*')
-    #     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,Overwrite, Destination, Content-Type, Depth, User-Agent, Translate, Range, Content-Range, Timeout, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control, Location, Lock-Token, If')        
-    #     response.headers.add('Access-Control-Expose-Headers', 'DAV, content-length, Allow')
-    #     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    #     return response
     
     
     @jwt.expired_token_loader
-    def my_expired_token_callback(expired_token):
-        token_type = expired_token['type']
+    def my_expired_token_callback():
         return jsonify({
             'status': 401,
             'sub_status': 42,
-            'smessage': 'The {} token has expired'.format(token_type),
+            'smessage': 'The {} token has expired',
             'message':'Your session has expired, log in again'
             }), 401
     

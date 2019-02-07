@@ -47,14 +47,17 @@ class GetUserParcels(Resource):
     @jwt_required
     def get(self, user_id):
         """Get all parcel by a unique user ID."""
-        user_id = get_jwt_identity()
-        user = User().get_user_by_id(user_id)
+        current_user = get_jwt_identity()
+        user = User().get_user_by_id(current_user)
         if user.role == "admin" or user.user_id == user_id:
-            userparcels = Order().get_user_parcels(user_id)
-            if len(userparcels) == 0:
-                return{"message":"user {} has no parcels".format(user_id)}, 404
-            return{"message":[parcel.serialize_order() for parcel in userparcels],"status":"success"}, 200
-        return{"message":"you are not allowed to view these,you should be admin or the owner"}
+            user_in_db= User().get_user_by_id(user_id)
+            if user_in_db:
+                userparcels = Order().get_user_parcels(user_id)
+                if len(userparcels) == 0:
+                    return{"smessage":"user {} has no parcels".format(user_id),"message":"you have no parcels"}
+                return{"message":[parcel.serialize_order() for parcel in userparcels],"status":"success"}, 200
+            return{"message":"we don't have user {} in our database".format(user_id)}
+        return{"message":"you are not allowed to view these,you should be admin or the owner"}, 403
         
 
 class GetParcels(Resource):
@@ -65,7 +68,7 @@ class GetParcels(Resource):
         """Get method to return all orders."""
         allparcels = Order().get_all_parcels()
         if len(allparcels) == 0:
-            return{"message":"no parcels found"}
+            return{"message":"no parcels found","status":"notfound"}, 404
         return{"status":"success", "message":[parcel.serialize_order() for parcel in allparcels]}, 200
 
 class GetSpecificParcel(Resource):
@@ -76,8 +79,8 @@ class GetSpecificParcel(Resource):
         """Get method fetch a specific parcel."""
         order = Order().get_order_by_orderid(order_id)
         if order:
-            return{"message":order.serialize_order()}
-        return{"message":"order {} not found".format(order_id)}
+            return{"message":order.serialize_order(),"status":"success"},200
+        return{"message":"order {} not found".format(order_id)}, 404
 
 class GetStatusParcels(Resource):
     """Class to get all delivered parcels."""
@@ -95,8 +98,8 @@ class GetStatusParcels(Resource):
             orders = Order().get_specific_parcels(status)
             if orders:
                 return{"message":[order.serialize_order() for order in orders]},200
-            return{"message":"no {} parcels found".format(status)},404
-        return{"message":"you should be an admin to view {} parcels".format(status)}
+            return{"message":"no {} parcels found".format(status)},204
+        return{"message":"you should be an admin to view {} parcels".format(status)},403
         
 
 
@@ -117,9 +120,9 @@ class ChangeParcelStatus(Resource):
                 order = Order().get_order_by_orderid(order_id)
                 if order:
                     if order.status ==  "cancelled" or order.status ==  "delivered":
-                        return{"message":"can't change to {}".format(data['new status'])+" this already {}".format(order.status)}, 400
+                        return{"message":"can't change to {}".format(data['new status'])+" this already {}".format(order.status)}, 409
                     Order().change_parcel_status(data['new status'], order_id)
-                    return{"message":"parcel status changed to {}".format(data['new status'])}
+                    return{"message":"parcel status changed to {}".format(data['new status'])}, 200
                 return{"message":"order not found"},404
             return {"message":"you are not an admin"}, 403
         return{"message":"user not found"}, 404
@@ -160,8 +163,8 @@ class ChangeParcelDestination(Resource):
         if order:
             if order.user_id == user_id:
                 if order.status == "delivered" or order.status == "cancelled":
-                    return{"message":"can't change, this already {}".format(order.status)}, 404
+                    return{"message":"can't change, this already {}".format(order.status)}, 409
                 Order().change_parcel_destination(data['destination'])
                 return{"message":"destination changed to{}".format(data['destination'])}, 200
-            return{"message":"not allowed, only owners may change parcel destination"}
+            return{"message":"not allowed, only owners may change parcel destination"}, 403
         return{"message":"order not found"},404
